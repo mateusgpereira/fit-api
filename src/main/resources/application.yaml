@@ -1,0 +1,44 @@
+# Database
+quarkus:
+  banner:
+    enabled: false
+  datasource:
+    db-kind: postgresql
+  hibernate-orm:
+    database:
+      generation: none
+
+# Test Profile
+"%test":
+  quarkus:
+    log:
+      level: INFO
+      category:
+        "io.pwii":
+          level: DEBUG
+    hibernate-orm:
+      log:
+        sql: true
+    flyway:
+      migrate-at-start: true
+      locations: db/migration,db/testdata
+
+# Dev Profile
+"%dev":
+  quarkus:
+    log:
+      level: INFO
+      category:
+        "io.demo":
+          level: DEBUG
+    datasource:
+      username: app
+      password: app
+      jdbc:
+        url: jdbc:postgresql://localhost:5432/fit_system_db
+    hibernate-orm:
+      log:
+        sql: true
+    flyway:
+      migrate-at-start: true
+      locations: db/migration,db/testdata
