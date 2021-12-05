@@ -1,9 +1,9 @@
 package io.pwii.service;
 
-import io.pwii.model.InstructorRest;
+import io.pwii.entity.Instructor;
 
 public interface InstructorService {
 
-  InstructorRest createInstructor(InstructorRest model);
+  Instructor createInstructor(Instructor model);
   
 }

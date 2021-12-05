@@ -8,6 +8,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import io.pwii.entity.Instructor;
+import io.pwii.mapper.InstructorMapper;
 import io.pwii.model.InstructorRest;
 import io.pwii.resource.InstructorResource;
 import io.pwii.service.InstructorService;
@@ -20,11 +22,15 @@ public class InstructorResourceImpl implements InstructorResource {
   @Inject
   private InstructorService instructorService;
 
+  @Inject
+  private InstructorMapper instructorMapper;
+
   @Override
   @POST
   public Response createInstructor(@Valid InstructorRest model) {
-    final InstructorRest created = instructorService.createInstructor(model);
-    return Response.status(Response.Status.CREATED).entity(created).build();
+    final Instructor created = instructorService.createInstructor(instructorMapper.toEntity(model));
+    InstructorRest createdRest = instructorMapper.toRest(created);
+    return Response.status(Response.Status.CREATED).entity(createdRest).build();
   }
   
 }
