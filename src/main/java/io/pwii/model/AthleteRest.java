@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class InstructorRest {
+public class AthleteRest {
 
   private Long id;
 
@@ -19,7 +19,7 @@ public class InstructorRest {
   @Email
   private String email;
 
-  @Min(value = 16)
+  @Min(value = 14)
   private short age;
 
   @NotBlank
@@ -29,5 +29,11 @@ public class InstructorRest {
 
   @CPF
   private String cpf;
+
+  private short height;
+
+  private Double weight;
+
+  private Long instructorId;
   
 }
