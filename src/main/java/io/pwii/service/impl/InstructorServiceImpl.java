@@ -4,7 +4,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import io.pwii.entity.Instructor;
-import io.pwii.repository.InstructorRespository;
+import io.pwii.repository.InstructorRepository;
 import io.pwii.service.InstructorService;
 import io.quarkus.elytron.security.common.BcryptUtil;
 
@@ -12,7 +12,7 @@ import io.quarkus.elytron.security.common.BcryptUtil;
 public class InstructorServiceImpl implements InstructorService {
 
   @Inject
-  private InstructorRespository instructorRespository;
+  private InstructorRepository instructorRespository;
 
   @Override
   @Transactional
