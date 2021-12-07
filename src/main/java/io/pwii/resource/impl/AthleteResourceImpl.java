@@ -33,6 +33,7 @@ public class AthleteResourceImpl implements AthleteResource {
   public Response createAthlete(@Valid AthleteRest model) {
     Athlete createdEntity = athleteService.createAthlete(model);
     AthleteRest createdRest = athleteMapper.toRest(createdEntity);
+    createdRest.setInstructorIdFromEntity(createdEntity.getInstructor());
     return Response.status(Response.Status.CREATED).entity(createdRest).build();
   }
 

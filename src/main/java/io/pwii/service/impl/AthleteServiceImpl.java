@@ -10,6 +10,7 @@ import io.pwii.model.AthleteRest;
 import io.pwii.repository.AthleteRepository;
 import io.pwii.repository.InstructorRepository;
 import io.pwii.service.AthleteService;
+import io.quarkus.elytron.security.common.BcryptUtil;
 
 @ApplicationScoped
 public class AthleteServiceImpl implements AthleteService {
@@ -27,6 +28,7 @@ public class AthleteServiceImpl implements AthleteService {
   public Athlete createAthlete(AthleteRest athlete) {
 
     Athlete athleteEntity = athleteMapper.toEntity(athlete);
+    athleteEntity.setPassword(BcryptUtil.bcryptHash(athlete.getPassword()));
 
     if (athlete.getInstructorId() != null) {
       Optional<Instructor> instructorOptional = instructorRepository.findByIdOptional(athlete.getInstructorId());

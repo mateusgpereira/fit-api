@@ -4,6 +4,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.br.CPF;
+import io.pwii.entity.Instructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -35,5 +36,11 @@ public class AthleteRest {
   private Double weight;
 
   private Long instructorId;
+
+  public void setInstructorIdFromEntity(Instructor instructor) {
+    if (instructor != null) {
+      this.instructorId = instructor.getId();
+    }
+  }
   
 }
