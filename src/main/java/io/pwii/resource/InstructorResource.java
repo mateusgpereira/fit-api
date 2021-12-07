@@ -7,5 +7,6 @@ import io.pwii.model.InstructorRest;
 public interface InstructorResource {
 
   Response createInstructor(@Valid InstructorRest model);
+  Response listInstructors(int page, int limit);
   
 }
