@@ -5,6 +5,7 @@ import java.util.Optional;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import javax.ws.rs.NotFoundException;
 import io.pwii.entity.Athlete;
 import io.pwii.entity.Instructor;
 import io.pwii.mapper.AthleteMapper;
@@ -66,7 +67,7 @@ public class AthleteServiceImpl implements AthleteService {
   public Athlete update(Long athleteId, AthleteUpdateRequest athlete) {
     Optional<Athlete> optionalAthlete = athleteRepository.findByIdOptional(athleteId);
     if (optionalAthlete.isEmpty()) {
-      throw new RuntimeException("Athlete note found");
+      throw new NotFoundException("Athlete Not Found");
     }
 
     Athlete entity = optionalAthlete.get();
@@ -104,7 +105,7 @@ public class AthleteServiceImpl implements AthleteService {
   public Athlete getById(Long athleteId) {
     Optional<Athlete> optionalAthlete = athleteRepository.findByIdOptional(athleteId);
     if (optionalAthlete.isEmpty()) {
-      throw new RuntimeException("Athlete Not Found");
+      throw new NotFoundException("Athlete Not Found");
     }
     return optionalAthlete.get();
   }

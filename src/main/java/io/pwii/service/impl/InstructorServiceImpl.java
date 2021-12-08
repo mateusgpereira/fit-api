@@ -5,6 +5,7 @@ import java.util.Optional;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import javax.ws.rs.NotFoundException;
 import io.pwii.entity.Instructor;
 import io.pwii.mapper.InstructorMapper;
 import io.pwii.model.InstructorRest;
@@ -52,7 +53,7 @@ public class InstructorServiceImpl implements InstructorService {
   public Instructor update(Long instructorId, InstructorUpdateRequest instructor) {
     Optional<Instructor> optionalInstructor = instructorRepository.findByIdOptional(instructorId);
     if (optionalInstructor.isEmpty()) {
-      throw new RuntimeException("Instructor not found");
+      throw new NotFoundException("Instructor Not Found");
     }
 
     Instructor entity = optionalInstructor.get();
@@ -81,7 +82,7 @@ public class InstructorServiceImpl implements InstructorService {
   public Instructor getById(Long instructorId) {
     Optional<Instructor> optionalInstructor = instructorRepository.findByIdOptional(instructorId);
     if (optionalInstructor.isEmpty()) {
-      throw new RuntimeException("Instructor Not Found");
+      throw new NotFoundException("Instructor Not Found");
     }
 
     return optionalInstructor.get();
