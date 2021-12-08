@@ -8,7 +8,6 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
-import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -77,6 +76,15 @@ public class InstructorResourceImpl implements InstructorResource {
   public Response deleteInstructor(@PathParam("instructorId") Long instructorId) {
     instructorService.delete(instructorId);
     return Response.ok().build();
+  }
+
+  @GET
+  @Path("/{instructorId}")
+  @Override
+  public Response getInstructor(@PathParam("instructorId") Long instructorId) {
+    Instructor entity = instructorService.getById(instructorId);
+    InstructorRest rest = instructorMapper.toRest(entity);
+    return Response.ok(rest).build();
   }
 
 }

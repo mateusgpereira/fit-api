@@ -100,4 +100,13 @@ public class AthleteServiceImpl implements AthleteService {
     
   }
 
+  @Override
+  public Athlete getById(Long athleteId) {
+    Optional<Athlete> optionalAthlete = athleteRepository.findByIdOptional(athleteId);
+    if (optionalAthlete.isEmpty()) {
+      throw new RuntimeException("Athlete Not Found");
+    }
+    return optionalAthlete.get();
+  }
+
 }

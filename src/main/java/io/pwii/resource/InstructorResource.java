@@ -15,4 +15,6 @@ public interface InstructorResource {
 
   Response deleteInstructor(Long instructorId);
 
+  Response getInstructor(Long instructorId);
+
 }

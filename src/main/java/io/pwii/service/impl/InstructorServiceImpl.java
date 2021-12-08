@@ -19,7 +19,7 @@ import io.quarkus.hibernate.orm.panache.PanacheQuery;
 public class InstructorServiceImpl implements InstructorService {
 
   @Inject
-  private InstructorRepository instructorRespository;
+  private InstructorRepository instructorRepository;
 
   @Inject
   private InstructorMapper instructorMapper;
@@ -29,13 +29,13 @@ public class InstructorServiceImpl implements InstructorService {
   public Instructor create(InstructorRest model) {
     Instructor entity = instructorMapper.toEntity(model);
     entity.setPassword(BcryptUtil.bcryptHash(entity.getPassword()));
-    instructorRespository.persist(entity);
+    instructorRepository.persist(entity);
     return entity;
   }
 
   @Override
   public PageModel<Instructor> list(int page, int limit) {
-    PanacheQuery<Instructor> allInstructors = instructorRespository.findAll();
+    PanacheQuery<Instructor> allInstructors = instructorRepository.findAll();
     List<Instructor> listPaginated = allInstructors.page(page, limit).list();
 
     return PageModel.<Instructor>builder()
@@ -50,7 +50,7 @@ public class InstructorServiceImpl implements InstructorService {
   @Transactional
   @Override
   public Instructor update(Long instructorId, InstructorUpdateRequest instructor) {
-    Optional<Instructor> optionalInstructor = instructorRespository.findByIdOptional(instructorId);
+    Optional<Instructor> optionalInstructor = instructorRepository.findByIdOptional(instructorId);
     if (optionalInstructor.isEmpty()) {
       throw new RuntimeException("Instructor not found");
     }
@@ -62,7 +62,7 @@ public class InstructorServiceImpl implements InstructorService {
       entity.setPassword(BcryptUtil.bcryptHash(instructor.getPassword()));
     }
 
-    instructorRespository.persist(entity);
+    instructorRepository.persist(entity);
     
     return entity;
   }
@@ -70,11 +70,21 @@ public class InstructorServiceImpl implements InstructorService {
   @Transactional
   @Override
   public void delete(Long instructorId) {
-    boolean wasDeleted = instructorRespository.deleteById(instructorId);
+    boolean wasDeleted = instructorRepository.deleteById(instructorId);
 
     if (!wasDeleted) {
       throw new RuntimeException("Something went wrong");
     }
+  }
+
+  @Override
+  public Instructor getById(Long instructorId) {
+    Optional<Instructor> optionalInstructor = instructorRepository.findByIdOptional(instructorId);
+    if (optionalInstructor.isEmpty()) {
+      throw new RuntimeException("Instructor Not Found");
+    }
+
+    return optionalInstructor.get();
   }
   
 }

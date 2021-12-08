@@ -82,4 +82,14 @@ public class AthleteResourceImpl implements AthleteResource {
     return Response.ok().build();
   }
 
+
+  @GET
+  @Path("/{athleteId}")
+  @Override
+  public Response getAthlete(@PathParam("athleteId") Long athleteId) {
+    Athlete entity = athleteService.getById(athleteId);
+    AthleteRest rest = athleteMapper.toRest(entity);
+    return Response.ok(rest).build();
+  }
+
 }

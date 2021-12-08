@@ -12,6 +12,8 @@ public interface AthleteService {
   PageModel<Athlete> list(int page, int limit);
 
   Athlete update(Long athleteId, AthleteUpdateRequest athlete);
-  
+
   void delete(Long athleteId);
+
+  Athlete getById(Long athleteId);
 }

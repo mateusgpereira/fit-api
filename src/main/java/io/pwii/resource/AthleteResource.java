@@ -15,4 +15,6 @@ public interface AthleteResource {
 
   Response deleteAthlete(Long athleteId);
 
+  Response getAthlete(Long athleteId);
+
 }
