@@ -31,16 +31,16 @@ public class InstructorResourceImpl implements InstructorResource {
   @Inject
   private InstructorMapper instructorMapper;
 
-  @Override
   @POST
+  @Override
   public Response createInstructor(@Valid InstructorRest model) {
     final Instructor created = instructorService.create(instructorMapper.toEntity(model));
     InstructorRest createdRest = instructorMapper.toRest(created);
     return Response.status(Response.Status.CREATED).entity(createdRest).build();
   }
 
-  @Override
   @GET
+  @Override
   public Response listInstructors(
     @DefaultValue("0") @QueryParam("page") int page,
     @DefaultValue("25") @QueryParam("limit") int limit

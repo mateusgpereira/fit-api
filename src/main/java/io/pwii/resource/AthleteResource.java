@@ -7,5 +7,7 @@ import io.pwii.model.AthleteRest;
 public interface AthleteResource {
 
   Response createAthlete(@Valid AthleteRest model);
-  
+
+  Response listAthletes(int page, int limit);
+
 }
