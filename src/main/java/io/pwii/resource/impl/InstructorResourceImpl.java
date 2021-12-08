@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.PATCH;
@@ -68,6 +69,14 @@ public class InstructorResourceImpl implements InstructorResource {
     InstructorRest instructorRest = instructorMapper.toRest(entity);
     
     return Response.ok(instructorRest).build();
+  }
+
+  @DELETE
+  @Path("/{instructorId}")
+  @Override
+  public Response deleteInstructor(@PathParam("instructorId") Long instructorId) {
+    instructorService.delete(instructorId);
+    return Response.ok().build();
   }
 
 }

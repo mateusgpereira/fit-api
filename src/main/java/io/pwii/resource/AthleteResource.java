@@ -13,4 +13,6 @@ public interface AthleteResource {
 
   Response updateAthlete(Long athleteId, @Valid AthleteUpdateRequest model);
 
+  Response deleteAthlete(Long athleteId);
+
 }

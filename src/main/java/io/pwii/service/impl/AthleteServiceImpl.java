@@ -89,4 +89,15 @@ public class AthleteServiceImpl implements AthleteService {
     return entity;
   }
 
+  @Transactional
+  @Override
+  public void delete(Long athleteId) {
+    boolean wasDeletesd = athleteRepository.deleteById(athleteId);
+
+    if (!wasDeletesd) {
+      throw new RuntimeException("Something went wrong");
+    }
+    
+  }
+
 }

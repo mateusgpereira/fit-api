@@ -13,4 +13,6 @@ public interface InstructorResource {
 
   Response updateInstructor(Long instructorId, @Valid InstructorUpdateRequest model);
 
+  Response deleteInstructor(Long instructorId);
+
 }

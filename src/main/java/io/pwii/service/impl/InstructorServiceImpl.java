@@ -66,5 +66,15 @@ public class InstructorServiceImpl implements InstructorService {
     
     return entity;
   }
+
+  @Transactional
+  @Override
+  public void delete(Long instructorId) {
+    boolean wasDeleted = instructorRespository.deleteById(instructorId);
+
+    if (!wasDeleted) {
+      throw new RuntimeException("Something went wrong");
+    }
+  }
   
 }

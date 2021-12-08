@@ -13,4 +13,5 @@ public interface AthleteService {
 
   Athlete update(Long athleteId, AthleteUpdateRequest athlete);
   
+  void delete(Long athleteId);
 }

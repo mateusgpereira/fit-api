@@ -13,4 +13,6 @@ public interface InstructorService {
 
   Instructor update(Long instructorId, InstructorUpdateRequest instructor);
 
+  void delete(Long instructorId);
+
 }
