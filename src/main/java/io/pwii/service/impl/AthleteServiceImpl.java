@@ -5,6 +5,7 @@ import java.util.Optional;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import io.pwii.entity.Athlete;
 import io.pwii.entity.Instructor;
@@ -96,7 +97,7 @@ public class AthleteServiceImpl implements AthleteService {
     boolean wasDeletesd = athleteRepository.deleteById(athleteId);
 
     if (!wasDeletesd) {
-      throw new RuntimeException("Something went wrong");
+      throw new BadRequestException("Something went wrong");
     }
     
   }

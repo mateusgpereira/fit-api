@@ -5,6 +5,7 @@ import java.util.Optional;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import io.pwii.entity.Instructor;
 import io.pwii.mapper.InstructorMapper;
@@ -74,7 +75,7 @@ public class InstructorServiceImpl implements InstructorService {
     boolean wasDeleted = instructorRepository.deleteById(instructorId);
 
     if (!wasDeleted) {
-      throw new RuntimeException("Something went wrong");
+      throw new BadRequestException("Something went wrong");
     }
   }
 
