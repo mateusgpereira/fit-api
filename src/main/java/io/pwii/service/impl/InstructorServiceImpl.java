@@ -34,6 +34,7 @@ public class InstructorServiceImpl implements InstructorService {
       .totalItems(allInstructors.count())
       .numberOfPages(allInstructors.pageCount())
       .currentPageTotalItems(listPaginated.size())
+      .currentPage(page)
       .content(listPaginated)
       .build();
   }

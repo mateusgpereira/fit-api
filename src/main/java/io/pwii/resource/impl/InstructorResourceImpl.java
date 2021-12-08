@@ -50,12 +50,7 @@ public class InstructorResourceImpl implements InstructorResource {
       .map(entity -> instructorMapper.toRest(entity))
       .collect(Collectors.toList());
 
-    PageModel<InstructorRest> restPage = PageModel.<InstructorRest>builder()
-      .content(list)
-      .currentPageTotalItems(entityPage.getCurrentPageTotalItems())
-      .numberOfPages(entityPage.getNumberOfPages())
-      .totalItems(entityPage.getTotalItems())
-      .build();
+    PageModel<InstructorRest> restPage = PageModel.<InstructorRest>mapPage(entityPage, list);
 
     return Response.ok(restPage).build();
   }
