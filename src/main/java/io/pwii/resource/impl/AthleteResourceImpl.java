@@ -15,7 +15,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import io.pwii.entity.Athlete;
-import io.pwii.mapper.CustomMapperHelper;
+import io.pwii.mapper.AthleteMapper;
 import io.pwii.model.AthleteRest;
 import io.pwii.model.PageModel;
 import io.pwii.resource.AthleteResource;
@@ -27,18 +27,17 @@ import io.pwii.service.AthleteService;
 public class AthleteResourceImpl implements AthleteResource {
 
   @Inject
-  AthleteService athleteService;
+  private AthleteService athleteService;
 
   @Inject
-  CustomMapperHelper customMapperHelper;
-
+  private AthleteMapper athleteMapper;
 
   @POST
   @Transactional
   @Override
   public Response createAthlete(@Valid AthleteRest model) {
     Athlete createdEntity = athleteService.create(model);
-    AthleteRest createdRest = customMapperHelper.fromEntityToRest(createdEntity);
+    AthleteRest createdRest = athleteMapper.toRest(createdEntity);
 
     return Response.status(Response.Status.CREATED).entity(createdRest).build();
   }
@@ -52,7 +51,7 @@ public class AthleteResourceImpl implements AthleteResource {
   ) {
     PageModel<Athlete> entityPage = athleteService.list(page, limit);
     List<AthleteRest> listRest = entityPage.getContent().stream()
-        .map(entity -> customMapperHelper.fromEntityToRest(entity))
+        .map(entity -> athleteMapper.toRest(entity))
         .collect(Collectors.toList());
 
     PageModel<AthleteRest> pageRest = PageModel.mapPage(entityPage, listRest);

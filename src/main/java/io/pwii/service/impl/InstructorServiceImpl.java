@@ -1,10 +1,14 @@
 package io.pwii.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import io.pwii.entity.Instructor;
+import io.pwii.mapper.InstructorMapper;
+import io.pwii.model.InstructorRest;
+import io.pwii.model.InstructorUpdateRequest;
 import io.pwii.model.PageModel;
 import io.pwii.repository.InstructorRepository;
 import io.pwii.service.InstructorService;
@@ -17,9 +21,13 @@ public class InstructorServiceImpl implements InstructorService {
   @Inject
   private InstructorRepository instructorRespository;
 
-  @Override
+  @Inject
+  private InstructorMapper instructorMapper;
+
   @Transactional
-  public Instructor create(Instructor entity) {
+  @Override
+  public Instructor create(InstructorRest model) {
+    Instructor entity = instructorMapper.toEntity(model);
     entity.setPassword(BcryptUtil.bcryptHash(entity.getPassword()));
     instructorRespository.persist(entity);
     return entity;
@@ -37,6 +45,20 @@ public class InstructorServiceImpl implements InstructorService {
       .currentPage(page)
       .content(listPaginated)
       .build();
+  }
+
+  @Transactional
+  @Override
+  public Instructor update(Long instructorId, InstructorUpdateRequest instructor) {
+    Optional<Instructor> optionalInstructor = instructorRespository.findByIdOptional(instructorId);
+    if (optionalInstructor.isEmpty()) {
+      throw new RuntimeException("Instructor not found");
+    }
+
+    Instructor entity = optionalInstructor.get();
+    instructorMapper.updateToEntity(instructor, entity);
+    
+    return entity;
   }
   
 }
