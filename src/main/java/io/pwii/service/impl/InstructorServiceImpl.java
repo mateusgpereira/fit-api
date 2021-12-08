@@ -61,6 +61,8 @@ public class InstructorServiceImpl implements InstructorService {
     if (instructor.getPassword() != null && !instructor.getPassword().isEmpty()) {
       entity.setPassword(BcryptUtil.bcryptHash(instructor.getPassword()));
     }
+
+    instructorRespository.persist(entity);
     
     return entity;
   }

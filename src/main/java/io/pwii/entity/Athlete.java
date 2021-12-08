@@ -11,7 +11,7 @@ import lombok.Data;
 public class Athlete extends User {
   
   @Column(length = 5)
-  private short height;
+  private Integer height;
 
   @Column(precision = 6, scale = 3)
   private Double weight;

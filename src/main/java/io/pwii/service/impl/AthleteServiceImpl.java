@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Optional;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import io.pwii.entity.Athlete;
 import io.pwii.entity.Instructor;
 import io.pwii.mapper.AthleteMapper;
 import io.pwii.model.AthleteRest;
+import io.pwii.model.AthleteUpdateRequest;
 import io.pwii.model.PageModel;
 import io.pwii.repository.AthleteRepository;
 import io.pwii.repository.InstructorRepository;
@@ -57,6 +59,34 @@ public class AthleteServiceImpl implements AthleteService {
         .numberOfPages(allAthletes.pageCount())
         .totalItems(allAthletes.count())
         .build();
+  }
+
+  @Transactional
+  @Override
+  public Athlete update(Long athleteId, AthleteUpdateRequest athlete) {
+    Optional<Athlete> optionalAthlete = athleteRepository.findByIdOptional(athleteId);
+    if (optionalAthlete.isEmpty()) {
+      throw new RuntimeException("Athlete note found");
+    }
+
+    Athlete entity = optionalAthlete.get();
+    athleteMapper.updateToEntity(athlete, entity);
+
+    if (athlete.getPassword() != null && !athlete.getPassword().isEmpty()) {
+      entity.setPassword(BcryptUtil.bcryptHash(athlete.getPassword()));
+    }
+
+    if (athlete.getInstructorId() != null) {
+      Optional<Instructor> optionalInstructor = instructorRepository.findByIdOptional(athlete.getInstructorId());
+
+      if (optionalInstructor.isPresent()) {
+        entity.setInstructor(optionalInstructor.get());
+      }
+    }
+
+    athleteRepository.persist(entity);
+
+    return entity;
   }
 
 }
