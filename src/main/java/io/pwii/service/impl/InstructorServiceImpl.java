@@ -57,6 +57,10 @@ public class InstructorServiceImpl implements InstructorService {
 
     Instructor entity = optionalInstructor.get();
     instructorMapper.updateToEntity(instructor, entity);
+
+    if (instructor.getPassword() != null && !instructor.getPassword().isEmpty()) {
+      entity.setPassword(BcryptUtil.bcryptHash(instructor.getPassword()));
+    }
     
     return entity;
   }

@@ -27,7 +27,7 @@ public class User extends PanacheEntityBase {
   private String email;
 
   @Column(length = 3)
-  private short age;
+  private Integer age;
 
   @Column(nullable = false)
   private String password;

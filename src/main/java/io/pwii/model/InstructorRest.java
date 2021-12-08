@@ -21,7 +21,7 @@ public class InstructorRest {
   private String email;
 
   @Min(value = 16)
-  private short age;
+  private Integer age;
 
   @NotBlank
   private String password;

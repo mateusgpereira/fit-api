@@ -21,7 +21,7 @@ public class AthleteRest {
   private String email;
 
   @Min(value = 14)
-  private short age;
+  private Integer age;
 
   @NotBlank
   private String password;

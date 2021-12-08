@@ -17,11 +17,11 @@ public class InstructorUpdateRequest {
   private String email;
 
   @Min(value = 16)
-  private short age;
+  private Integer age;
 
   private String password;
 
   @Size(min = 8, max = 20)
   private String phone;
-  
+
 }
