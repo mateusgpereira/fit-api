@@ -35,7 +35,7 @@ quarkus:
       username: app
       password: app
       jdbc:
-        url: jdbc:postgresql://localhost:5432/fit_system_db
+        url: jdbc:postgresql://localhost:5432/fit_system_db?stringtype=unspecified
     hibernate-orm:
       log:
         sql: true
