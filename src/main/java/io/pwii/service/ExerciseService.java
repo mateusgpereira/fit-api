@@ -12,5 +12,7 @@ public interface ExerciseService {
   PageModel<Exercise> list(int page, int limit);
 
   Exercise update(Long exerciseId, ExerciseUpdateRequestModel exercise);
+
+  void delete(Long exerciseId);
   
 }

@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -68,6 +69,12 @@ public class ExerciseResourceImpl implements ExerciseResource {
     return Response.ok(rest).build();
   }
 
-
+  @DELETE
+  @Path("/{exerciseId}")
+  @Override
+  public Response deleteExercise(@PathParam("exerciseId") Long exerciseId) {
+    exerciseService.delete(exerciseId);
+    return Response.ok().build();
+  }
 
 }

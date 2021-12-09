@@ -5,6 +5,7 @@ import java.util.Optional;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import io.pwii.entity.Exercise;
 import io.pwii.mapper.ExerciseMapper;
@@ -60,6 +61,16 @@ public class ExerciseServiceImpl implements ExerciseService {
     exerciseMapper.updateToEntity(exercise, entity);
     exerciseRepository.persist(entity);
     return entity;
+  }
+
+  @Transactional
+  @Override
+  public void delete(Long exerciseId) {
+    boolean wasDeleted = exerciseRepository.deleteById(exerciseId);
+    if (!wasDeleted) {
+      throw new BadRequestException("Something went wrong");
+    }
+    
   }
 
 }
