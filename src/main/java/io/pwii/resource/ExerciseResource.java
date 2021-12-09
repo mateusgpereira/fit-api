@@ -14,5 +14,7 @@ public interface ExerciseResource {
   Response updateExercise(Long exerciseId, @Valid ExerciseUpdateRequestModel exercise);
 
   Response deleteExercise(Long exerciseId);
+
+  Response getExercise(Long exerciseId);
   
 }

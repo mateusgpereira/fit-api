@@ -73,4 +73,14 @@ public class ExerciseServiceImpl implements ExerciseService {
     
   }
 
+  @Override
+  public Exercise getById(Long exerciseId) {
+    Optional<Exercise> optionalExercise = exerciseRepository.findByIdOptional(exerciseId);
+    if (optionalExercise.isEmpty()) {
+      throw new NotFoundException("Exercise Not Found");
+    }
+
+    return optionalExercise.get();
+  }
+
 }

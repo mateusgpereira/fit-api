@@ -14,5 +14,7 @@ public interface ExerciseService {
   Exercise update(Long exerciseId, ExerciseUpdateRequestModel exercise);
 
   void delete(Long exerciseId);
+
+  Exercise getById(Long exerciseId);
   
 }

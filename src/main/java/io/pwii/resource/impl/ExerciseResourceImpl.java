@@ -77,4 +77,13 @@ public class ExerciseResourceImpl implements ExerciseResource {
     return Response.ok().build();
   }
 
+  @GET
+  @Path("/{exerciseId}")
+  @Override
+  public Response getExercise(@PathParam("exerciseId") Long exerciseId) {
+    Exercise entity = exerciseService.getById(exerciseId);
+    ExerciseRestModel rest = exerciseMapper.toRest(entity);
+    return Response.ok(rest).build();
+  }
+
 }
