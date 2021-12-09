@@ -2,16 +2,14 @@ package io.pwii.model.request;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 import io.pwii.entity.enums.WorkoutCategory;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class ExerciseRequestModel {
+public class ExerciseUpdateRequestModel {
 
-  @NotBlank
   private String title;
 
   private String description;
@@ -32,7 +30,5 @@ public class ExerciseRequestModel {
   private String equipment;
 
   private WorkoutCategory category;
-
-  private Long workoutId;
   
 }

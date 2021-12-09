@@ -1,13 +1,16 @@
 package io.pwii.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import javax.ws.rs.NotFoundException;
 import io.pwii.entity.Exercise;
 import io.pwii.mapper.ExerciseMapper;
 import io.pwii.model.PageModel;
 import io.pwii.model.request.ExerciseRequestModel;
+import io.pwii.model.request.ExerciseUpdateRequestModel;
 import io.pwii.repository.ExerciseRepository;
 import io.pwii.service.ExerciseService;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
@@ -42,6 +45,21 @@ public class ExerciseServiceImpl implements ExerciseService {
         .numberOfPages(allExercises.pageCount())
         .totalItems(allExercises.count())
         .build();
+  }
+
+  @Transactional
+  @Override
+  public Exercise update(Long exerciseId, ExerciseUpdateRequestModel exercise) {
+    Optional<Exercise> optionalExercise = exerciseRepository.findByIdOptional(exerciseId);
+
+    if (optionalExercise.isEmpty()) {
+      throw new NotFoundException("Exercise Not Found");
+    }
+
+    Exercise entity = optionalExercise.get();
+    exerciseMapper.updateToEntity(exercise, entity);
+    exerciseRepository.persist(entity);
+    return entity;
   }
 
 }
