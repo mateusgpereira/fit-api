@@ -13,11 +13,13 @@ import io.pwii.entity.Instructor;
 import io.pwii.entity.Workout;
 import io.pwii.mapper.ExerciseMapper;
 import io.pwii.mapper.WorkoutMapper;
+import io.pwii.model.PageModel;
 import io.pwii.model.request.WorkoutRequestModel;
 import io.pwii.repository.AthleteRepository;
 import io.pwii.repository.InstructorRepository;
 import io.pwii.repository.WorkoutRepository;
 import io.pwii.service.WorkoutService;
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
 
 @ApplicationScoped
 public class WorkoutServiceImpl implements WorkoutService {
@@ -60,7 +62,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     entity.setInstructor(optionalInstructor.get());
 
     List<Exercise> exerciseList = workout.getExercises().stream()
-        .map(exercise -> { 
+        .map(exercise -> {
           Exercise exerciseEntity = exerciseMapper.toEntity(exercise);
           exerciseEntity.setWorkout(entity);
           return exerciseEntity;
@@ -72,6 +74,20 @@ public class WorkoutServiceImpl implements WorkoutService {
     workoutRepository.persist(entity);
 
     return entity;
+  }
+
+  @Override
+  public PageModel<Workout> list(int page, int limit) {
+    PanacheQuery<Workout> allWorkouts = workoutRepository.findAll();
+    List<Workout> currentPageList = allWorkouts.page(page, limit).list();
+
+    return PageModel.<Workout>builder()
+        .content(currentPageList)
+        .currentPage(page)
+        .currentPageTotalItems(currentPageList.size())
+        .numberOfPages(allWorkouts.pageCount())
+        .totalItems(allWorkouts.count())
+        .build();
   }
 
 }

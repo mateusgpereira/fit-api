@@ -7,5 +7,7 @@ import io.pwii.model.request.WorkoutRequestModel;
 public interface WorkoutResource {
 
   Response createWorkout(@Valid WorkoutRequestModel workout);
+
+  Response listWorkouts(int page, int limit);
   
 }
