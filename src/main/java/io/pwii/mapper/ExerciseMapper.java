@@ -20,6 +20,8 @@ public interface ExerciseMapper {
   @Mapping(source = "workout.id", target = "workoutId")
   ExerciseRestModel toRest(Exercise entity);
 
-  Exercise updateToEntity(ExerciseUpdateRequestModel model, @MappingTarget Exercise entity);
+  void updateToEntity(ExerciseUpdateRequestModel model, @MappingTarget Exercise entity);
+
+  Exercise updateToEntity(ExerciseUpdateRequestModel model);
   
 };

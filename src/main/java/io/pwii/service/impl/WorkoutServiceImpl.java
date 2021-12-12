@@ -7,6 +7,8 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.BadRequestException;
+import javax.ws.rs.NotFoundException;
+import org.jboss.logging.Logger;
 import io.pwii.entity.Athlete;
 import io.pwii.entity.Exercise;
 import io.pwii.entity.Instructor;
@@ -15,7 +17,9 @@ import io.pwii.mapper.ExerciseMapper;
 import io.pwii.mapper.WorkoutMapper;
 import io.pwii.model.PageModel;
 import io.pwii.model.request.WorkoutRequestModel;
+import io.pwii.model.request.WorkoutUpdateRequestModel;
 import io.pwii.repository.AthleteRepository;
+import io.pwii.repository.ExerciseRepository;
 import io.pwii.repository.InstructorRepository;
 import io.pwii.repository.WorkoutRepository;
 import io.pwii.service.WorkoutService;
@@ -34,10 +38,16 @@ public class WorkoutServiceImpl implements WorkoutService {
   private AthleteRepository athleteRepository;
 
   @Inject
+  private ExerciseRepository exerciseRepository;
+
+  @Inject
   private WorkoutMapper workoutMapper;
 
   @Inject
   private ExerciseMapper exerciseMapper;
+
+  @Inject
+  Logger logger;
 
   @Transactional
   @Override
@@ -88,6 +98,36 @@ public class WorkoutServiceImpl implements WorkoutService {
         .numberOfPages(allWorkouts.pageCount())
         .totalItems(allWorkouts.count())
         .build();
+  }
+
+  @Transactional
+  @Override
+  public Workout update(Long workoutId, WorkoutUpdateRequestModel workout) {
+    Optional<Workout> optionalWorkout = workoutRepository.findByIdOptional(workoutId);
+
+    if (optionalWorkout.isEmpty()) {
+      throw new NotFoundException("Workout Not Found");
+    }
+
+    Workout entity = optionalWorkout.get();
+    workoutMapper.updateToEntity(workout, entity);
+
+    if (workout.getExercises().size() > 0) {
+      entity.setExercises(null);
+      exerciseRepository.deleteAllByWorkoutId(workoutId);
+      List<Exercise> exercises = workout.getExercises()
+          .stream()
+          .map(exercise -> {
+            Exercise exerciseEntity = exerciseMapper.updateToEntity(exercise);
+            exerciseEntity.setWorkout(entity);
+            return exerciseEntity;
+          })
+          .collect(Collectors.toList());
+      entity.setExercises(exercises);
+    }
+
+    workoutRepository.persist(entity);
+    return entity;
   }
 
 }

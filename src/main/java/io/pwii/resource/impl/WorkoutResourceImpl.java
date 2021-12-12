@@ -8,7 +8,9 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -17,6 +19,7 @@ import io.pwii.entity.Workout;
 import io.pwii.mapper.WorkoutMapper;
 import io.pwii.model.PageModel;
 import io.pwii.model.request.WorkoutRequestModel;
+import io.pwii.model.request.WorkoutUpdateRequestModel;
 import io.pwii.model.response.WorkoutRestModel;
 import io.pwii.resource.WorkoutResource;
 import io.pwii.service.WorkoutService;
@@ -43,8 +46,8 @@ public class WorkoutResourceImpl implements WorkoutResource {
   @GET
   @Override
   public Response listWorkouts(
-    @DefaultValue("0") @QueryParam("page") int page,
-    @DefaultValue("25") @QueryParam("limit") int limit) {
+      @DefaultValue("0") @QueryParam("page") int page,
+      @DefaultValue("25") @QueryParam("limit") int limit) {
     PageModel<Workout> pageEntity = workoutService.list(page, limit);
     List<WorkoutRestModel> listRest = pageEntity.getContent()
         .stream()
@@ -53,6 +56,15 @@ public class WorkoutResourceImpl implements WorkoutResource {
 
     PageModel<WorkoutRestModel> pageRest = PageModel.mapPage(pageEntity, listRest);
     return Response.ok(pageRest).build();
+  }
+
+  @PUT
+  @Path("/{workoutId}")
+  @Override
+  public Response updateWorkout(@PathParam("workoutId") Long workoutId, WorkoutUpdateRequestModel workout) {
+    Workout updated = workoutService.update(workoutId, workout);
+    WorkoutRestModel rest = workoutMapper.toRest(updated);
+    return Response.ok(rest).build();
   }
 
 }

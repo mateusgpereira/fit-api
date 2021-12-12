@@ -2,10 +2,12 @@ package io.pwii.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import io.pwii.entity.Workout;
 import io.pwii.model.request.WorkoutRequestModel;
+import io.pwii.model.request.WorkoutUpdateRequestModel;
 import io.pwii.model.response.WorkoutRestModel;
 
 @Mapper(
@@ -21,5 +23,7 @@ public interface WorkoutMapper {
     @Mapping(source = "instructor.id", target = "instructorId")
   })
   WorkoutRestModel toRest(Workout entity);
+
+  void updateToEntity(WorkoutUpdateRequestModel model, @MappingTarget Workout entity);
   
 }

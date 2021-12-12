@@ -9,12 +9,11 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import lombok.Data;
 
 @MappedSuperclass
 @Data
-public class User extends PanacheEntityBase {
+public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

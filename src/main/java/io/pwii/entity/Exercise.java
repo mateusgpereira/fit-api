@@ -2,6 +2,7 @@ package io.pwii.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,12 +15,11 @@ import javax.persistence.ManyToOne;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import io.pwii.entity.enums.WorkoutCategory;
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import lombok.Data;
 
 @Entity
 @Data
-public class Exercise extends PanacheEntityBase {
+public class Exercise {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,7 +50,7 @@ public class Exercise extends PanacheEntityBase {
   @Enumerated(EnumType.STRING)
   private WorkoutCategory category;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL )
   private Workout workout;
 
   @CreationTimestamp

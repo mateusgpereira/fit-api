@@ -18,12 +18,11 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import io.pwii.entity.enums.WorkoutCategory;
 import io.pwii.entity.enums.WorkoutCode;
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import lombok.Data;
 
 @Entity
 @Data
-public class Workout extends PanacheEntityBase {
+public class Workout {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,7 +42,7 @@ public class Workout extends PanacheEntityBase {
   @ManyToOne(fetch = FetchType.LAZY)
   private Athlete athlete;
 
-  @OneToMany(mappedBy = "workout", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+  @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL)
   private List<Exercise> exercises;
 
   @CreationTimestamp
