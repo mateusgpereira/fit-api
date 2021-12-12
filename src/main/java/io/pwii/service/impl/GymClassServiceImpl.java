@@ -1,6 +1,7 @@
 package io.pwii.service.impl;
 
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -9,11 +10,13 @@ import javax.ws.rs.BadRequestException;
 import io.pwii.entity.GymClass;
 import io.pwii.entity.Instructor;
 import io.pwii.mapper.GymClassMapper;
+import io.pwii.model.PageModel;
 import io.pwii.model.request.GymClassRequestModel;
 import io.pwii.repository.AthleteRepository;
 import io.pwii.repository.GymClassRepository;
 import io.pwii.repository.InstructorRepository;
 import io.pwii.service.GymClassService;
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
 
 @ApplicationScoped
 public class GymClassServiceImpl implements GymClassService {
@@ -62,6 +65,20 @@ public class GymClassServiceImpl implements GymClassService {
     gymClassRepository.persist(entity);
 
     return entity;
+  }
+
+  @Override
+  public PageModel<GymClass> list(int page, int limit) {
+    PanacheQuery<GymClass> allGymClasses = gymClassRepository.findAll();
+    List<GymClass> currentPageContent = allGymClasses.page(page, limit).list();
+
+    return PageModel.<GymClass>builder()
+    .content(currentPageContent)
+    .currentPageTotalItems(currentPageContent.size())
+    .currentPage(page)
+    .numberOfPages(allGymClasses.pageCount())
+    .totalItems(allGymClasses.count())
+    .build();
   }
 
 }

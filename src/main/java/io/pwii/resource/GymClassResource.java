@@ -7,5 +7,7 @@ import io.pwii.model.request.GymClassRequestModel;
 public interface GymClassResource {
 
   Response createGymClass(@Valid GymClassRequestModel gymClass);
+
+  Response list(int page, int limit);
   
 }
