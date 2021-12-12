@@ -130,4 +130,23 @@ public class WorkoutServiceImpl implements WorkoutService {
     return entity;
   }
 
+  @Transactional
+  @Override
+  public void delete(Long workoutId) {
+    boolean wasDeleted = workoutRepository.deleteById(workoutId);
+    if (!wasDeleted) {
+      throw new BadRequestException("Something went wrong");
+    }
+  }
+
+  @Override
+  public Workout getById(Long workoutId) {
+    Optional<Workout> optionalWorkout = workoutRepository.findByIdOptional(workoutId);
+    if (optionalWorkout.isEmpty()) {
+      throw new NotFoundException("Workout Not Found");
+    }
+
+    return optionalWorkout.get();
+  }
+
 }

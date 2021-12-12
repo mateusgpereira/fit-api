@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -64,6 +65,23 @@ public class WorkoutResourceImpl implements WorkoutResource {
   public Response updateWorkout(@PathParam("workoutId") Long workoutId, WorkoutUpdateRequestModel workout) {
     Workout updated = workoutService.update(workoutId, workout);
     WorkoutRestModel rest = workoutMapper.toRest(updated);
+    return Response.ok(rest).build();
+  }
+
+  @DELETE
+  @Path("/{workoutId}")
+  @Override
+  public Response deleteWorkouts(@PathParam("workoutId") Long workoutId) {
+    workoutService.delete(workoutId);
+    return Response.ok().build();
+  }
+
+  @GET
+  @Path("/{workoutId}")
+  @Override
+  public Response getWorkout(@PathParam("workoutId") Long workoutId) {
+    Workout entity = workoutService.getById(workoutId);
+    WorkoutRestModel rest = workoutMapper.toRest(entity);
     return Response.ok(rest).build();
   }
 

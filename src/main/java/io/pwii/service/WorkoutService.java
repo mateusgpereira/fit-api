@@ -12,5 +12,9 @@ public interface WorkoutService {
   PageModel<Workout> list(int page, int limit);
 
   Workout update(Long workoutId, WorkoutUpdateRequestModel workout);
+
+  void delete(Long workoutId);
+
+  Workout getById(Long workoutId);
   
 }

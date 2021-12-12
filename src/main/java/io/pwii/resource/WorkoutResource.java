@@ -12,5 +12,9 @@ public interface WorkoutResource {
   Response listWorkouts(int page, int limit);
 
   Response updateWorkout(Long workoutId, WorkoutUpdateRequestModel workout);
+
+  Response deleteWorkouts(Long workoutId);
+
+  Response getWorkout(Long workoutId);
   
 }
