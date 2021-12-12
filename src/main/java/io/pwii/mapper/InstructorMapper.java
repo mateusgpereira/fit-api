@@ -6,6 +6,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import io.pwii.entity.Instructor;
 import io.pwii.model.InstructorRest;
 import io.pwii.model.InstructorUpdateRequest;
+import io.pwii.model.response.InstructorRestBriefModel;
 
 @Mapper(
     componentModel = "cdi",
@@ -17,4 +18,6 @@ public interface InstructorMapper {
   InstructorRest toRest(Instructor entity);
 
   void updateToEntity(InstructorUpdateRequest model, @MappingTarget Instructor entity);
+
+  InstructorRestBriefModel toBriefRest(Instructor entity);
 }

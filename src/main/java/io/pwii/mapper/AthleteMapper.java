@@ -8,6 +8,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import io.pwii.entity.Athlete;
 import io.pwii.model.AthleteRest;
 import io.pwii.model.AthleteUpdateRequest;
+import io.pwii.model.response.AthleteRestBriefModel;
 
 @Mapper(
     componentModel = "cdi",
@@ -22,4 +23,7 @@ public interface AthleteMapper {
   Athlete toEntity(AthleteRest rest);
 
   Athlete updateToEntity(AthleteUpdateRequest model, @MappingTarget Athlete entity);
+
+  @Mapping(source = "instructor.id", target = "instructorId")
+  AthleteRestBriefModel toBriefRest(Athlete entity);
 }
