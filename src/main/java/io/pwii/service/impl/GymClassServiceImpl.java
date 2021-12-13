@@ -145,4 +145,13 @@ public class GymClassServiceImpl implements GymClassService {
     }
   }
 
+  @Override
+  public GymClass getById(Long gymClassId) {
+    Optional<GymClass> optionalGymClass = gymClassRepository.findByIdOptional(gymClassId);
+    if (optionalGymClass.isEmpty()) {
+      throw new NotFoundException("GymClass Not Found");
+    }
+    return optionalGymClass.get();
+  }
+
 }

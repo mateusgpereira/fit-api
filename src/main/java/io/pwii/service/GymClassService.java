@@ -14,5 +14,7 @@ public interface GymClassService {
   GymClass update(Long gymClassId, GymClassUpdateRequestModel gymClass);
 
   void delete(Long gymClassId);
+
+  GymClass getById(Long gymClassId);
   
 }

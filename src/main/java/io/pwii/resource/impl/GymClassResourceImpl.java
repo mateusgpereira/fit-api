@@ -77,4 +77,13 @@ public class GymClassResourceImpl implements GymClassResource {
     return Response.ok().build();
   }
 
+  @GET
+  @Path("/{gymClassId}")
+  @Override
+  public Response getGymClass(@PathParam("gymClassId") Long gymClassId) {
+    GymClass entity = gymClassService.getById(gymClassId);
+    GymClassRestModel rest = gymClassMapper.toRest(entity);
+    return Response.ok(rest).build();
+  }
+
 }
