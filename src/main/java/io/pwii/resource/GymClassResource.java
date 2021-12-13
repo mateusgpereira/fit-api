@@ -12,5 +12,7 @@ public interface GymClassResource {
   Response listGymClasses(int page, int limit);
 
   Response updateGymClass(Long gymClassId, GymClassUpdateRequestModel gymClass);
+
+  Response deleteGymClass(Long gymClassId);
   
 }

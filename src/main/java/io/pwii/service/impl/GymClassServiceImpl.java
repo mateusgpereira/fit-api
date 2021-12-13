@@ -106,7 +106,6 @@ public class GymClassServiceImpl implements GymClassService {
       entity.setAthletes(athletes);
     }
 
-
     LocalDate date = gymClass.getClassDate() != null ? gymClass.getClassDate() : entity.getClassDate();
     LocalTime time = gymClass.getClassTime() != null ? LocalTime.of(gymClass.getClassTime().getHour(), 0) : entity.getClassTime();
 
@@ -119,6 +118,15 @@ public class GymClassServiceImpl implements GymClassService {
 
     gymClassRepository.persist(entity);
     return entity;
+  }
+
+  @Transactional
+  @Override
+  public void delete(Long gymClassId) {
+    boolean wasDeleted = gymClassRepository.deleteById(gymClassId);
+    if (!wasDeleted) {
+      throw new BadRequestException("Something went wrong");
+    }
   }
 
   private void validateClassTimeForInstructor(LocalDate date, LocalTime time, Long instructorId) {

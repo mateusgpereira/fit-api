@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -66,6 +67,14 @@ public class GymClassResourceImpl implements GymClassResource {
     GymClass updatedEntity = gymClassService.update(gymClassId, gymClass);
     GymClassRestModel updatedRest = gymClassMapper.toRest(updatedEntity);
     return Response.ok(updatedRest).build();
+  }
+
+  @DELETE
+  @Path("/{gymClassId}")
+  @Override
+  public Response deleteGymClass(@PathParam("gymClassId") Long gymClassId) {
+    gymClassService.delete(gymClassId);
+    return Response.ok().build();
   }
 
 }

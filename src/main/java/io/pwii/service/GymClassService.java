@@ -12,5 +12,7 @@ public interface GymClassService {
   PageModel<GymClass> list(int page, int limit);
 
   GymClass update(Long gymClassId, GymClassUpdateRequestModel gymClass);
+
+  void delete(Long gymClassId);
   
 }
