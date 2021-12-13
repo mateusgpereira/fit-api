@@ -14,6 +14,7 @@ public class RuntimeExceptionHandler implements ExceptionMapper<RuntimeException
 
   @Override
   public Response toResponse(RuntimeException exception) {
+    exception.printStackTrace();
     return Response
         .status(Response.Status.INTERNAL_SERVER_ERROR)
         .entity(new ErrorMessage(exception.getMessage()))
