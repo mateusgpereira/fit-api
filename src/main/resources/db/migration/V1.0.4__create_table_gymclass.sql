@@ -19,5 +19,5 @@ CREATE TABLE gym_class_Athlete (
 );
 
 ALTER TABLE IF EXISTS gym_class ADD CONSTRAINT FK_gym_class_instructor FOREIGN KEY (instructor_id) REFERENCES instructor;
-alter table if exists gym_class_Athlete add constraint FK_gym_class_athlete_athlete foreign key (athletes_id) references Athlete;
-alter table if exists gym_class_Athlete add constraint FK_gym_class_atlhete_gymclass foreign key (GymClass_id) references gym_class;
+ALTER TABLE IF EXISTS gym_class_Athlete ADD CONSTRAINT FK_gym_class_athlete_athlete FOREIGN KEY (athletes_id) REFERENCES Athlete;
+ALTER TABLE IF EXISTS gym_class_Athlete ADD CONSTRAINT FK_gym_class_atlhete_gymclass FOREIGN KEY (GymClass_id) REFERENCES gym_class;

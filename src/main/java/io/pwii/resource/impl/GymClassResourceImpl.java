@@ -9,6 +9,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
+import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -17,11 +18,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import io.pwii.entity.Athlete;
 import io.pwii.entity.GymClass;
 import io.pwii.mapper.GymClassMapper;
 import io.pwii.model.PageModel;
 import io.pwii.model.request.GymClassRequestModel;
 import io.pwii.model.request.GymClassUpdateRequestModel;
+import io.pwii.model.request.UpdateRequestModel;
 import io.pwii.model.response.GymClassRestModel;
 import io.pwii.resource.GymClassResource;
 import io.pwii.service.GymClassService;
@@ -82,6 +85,16 @@ public class GymClassResourceImpl implements GymClassResource {
   @Override
   public Response getGymClass(@PathParam("gymClassId") Long gymClassId) {
     GymClass entity = gymClassService.getById(gymClassId);
+    GymClassRestModel rest = gymClassMapper.toRest(entity);
+    return Response.ok(rest).build();
+  }
+
+  @PATCH
+  @Path("/{gymClassId}/athletes")
+  @Transactional
+  @Override
+  public Response updateGymClassAthletes(@PathParam("gymClassId") Long gymClassId, @Valid List<UpdateRequestModel<Long>> data) {
+    GymClass entity = gymClassService.updateAthletes(gymClassId, data);
     GymClassRestModel rest = gymClassMapper.toRest(entity);
     return Response.ok(rest).build();
   }

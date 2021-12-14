@@ -14,8 +14,10 @@ import io.pwii.entity.GymClass;
 import io.pwii.entity.Instructor;
 import io.pwii.mapper.GymClassMapper;
 import io.pwii.model.PageModel;
+import io.pwii.model.enums.UpdateOperations;
 import io.pwii.model.request.GymClassRequestModel;
 import io.pwii.model.request.GymClassUpdateRequestModel;
+import io.pwii.model.request.UpdateRequestModel;
 import io.pwii.repository.AthleteRepository;
 import io.pwii.repository.GymClassRepository;
 import io.pwii.repository.InstructorRepository;
@@ -81,12 +83,7 @@ public class GymClassServiceImpl implements GymClassService {
   @Transactional
   @Override
   public GymClass update(Long gymClassId, GymClassUpdateRequestModel gymClass) {
-    Optional<GymClass> optionalGymClass = gymClassRepository.findByIdOptional(gymClassId);
-    if (optionalGymClass.isEmpty()) {
-      throw new NotFoundException("GymClass Not Found");
-    }
-
-    GymClass entity = optionalGymClass.get();
+    GymClass entity = this.findGymClassById(gymClassId);
 
     if (gymClass.getInstructorId() != null
         && gymClass.getInstructorId() != entity.getInstructor().getId()) {
@@ -103,6 +100,7 @@ public class GymClassServiceImpl implements GymClassService {
       if (athletes.size() < 1) {
         throw new BadRequestException("Invalid Athletes");
       }
+      
       entity.setAthletes(athletes);
     }
 
@@ -147,10 +145,45 @@ public class GymClassServiceImpl implements GymClassService {
 
   @Override
   public GymClass getById(Long gymClassId) {
-    Optional<GymClass> optionalGymClass = gymClassRepository.findByIdOptional(gymClassId);
+    return this.findGymClassById(gymClassId);
+  }
+
+  @Transactional
+  @Override
+  public GymClass updateAthletes(Long gymClassId, List<UpdateRequestModel<Long>> data) {
+    GymClass gymClassEntity = this.findGymClassById(gymClassId);
+
+    data.forEach( item -> {
+      if (item.getValues().size() < 1) {
+        return;
+      }
+
+      List<Athlete> athletes = athleteRepository.findAllById(item.getValues());
+      if (athletes.size() < 1) {
+        throw new BadRequestException("No valid items to " + item.getOperation().name());
+      }
+  
+      if (item.getOperation() == UpdateOperations.ADD) {
+        gymClassEntity.addToAthletes(athletes);
+        return;
+      }
+
+      if (item.getOperation() == UpdateOperations.REMOVE) {
+        gymClassEntity.removeFromAthlete(athletes);
+      }
+    });
+
+    gymClassRepository.persist(gymClassEntity);
+    
+    return gymClassEntity;
+  }
+
+  private GymClass findGymClassById(Long id) throws NotFoundException {
+    Optional<GymClass> optionalGymClass = gymClassRepository.findByIdOptional(id);
     if (optionalGymClass.isEmpty()) {
       throw new NotFoundException("GymClass Not Found");
     }
+
     return optionalGymClass.get();
   }
 
