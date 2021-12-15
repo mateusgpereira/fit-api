@@ -1,7 +1,6 @@
 package io.pwii.service;
 
 import java.util.List;
-import io.pwii.entity.Athlete;
 import io.pwii.entity.GymClass;
 import io.pwii.model.PageModel;
 import io.pwii.model.request.GymClassRequestModel;
@@ -21,5 +20,9 @@ public interface GymClassService {
   GymClass getById(Long gymClassId);
 
   GymClass updateAthletes(Long gymClassId, List<UpdateRequestModel<Long>> data);
+
+  GymClass addAthlete(Long gymClassId, Long athleteId);
+
+  GymClass deleteAthlete(Long gymClassId, Long athleteId);
   
 }

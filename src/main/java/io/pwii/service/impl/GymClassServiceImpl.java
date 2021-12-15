@@ -178,6 +178,36 @@ public class GymClassServiceImpl implements GymClassService {
     return gymClassEntity;
   }
 
+  @Transactional
+  @Override
+  public GymClass addAthlete(Long gymClassId, Long athleteId) {
+    GymClass gymClass = this.findGymClassById(gymClassId);
+    Optional<Athlete> optionalAthlete = athleteRepository.findByIdOptional(athleteId);
+
+    if (optionalAthlete.isEmpty()) {
+      throw new NotFoundException("Athlete Not Found");
+    }
+
+    gymClass.addToAthletes(optionalAthlete.get());
+
+    gymClassRepository.persist(gymClass);
+    return gymClass;
+  }
+
+  @Transactional
+  @Override
+  public GymClass deleteAthlete(Long gymClassId, Long athleteId) {
+    GymClass gymClass = this.findGymClassById(gymClassId);
+
+    boolean wasRemoved = gymClass.removeAtlheteById(athleteId);
+    if (!wasRemoved) {
+      throw new NotFoundException("Athlete Not Found");
+    }
+
+    gymClassRepository.persist(gymClass);
+    return gymClass;
+  }
+
   private GymClass findGymClassById(Long id) throws NotFoundException {
     Optional<GymClass> optionalGymClass = gymClassRepository.findByIdOptional(id);
     if (optionalGymClass.isEmpty()) {

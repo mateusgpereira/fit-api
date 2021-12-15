@@ -83,12 +83,25 @@ public class GymClass {
     this.athletes.addAll(athletes);
   }
 
-  public void removeFromAthlete(Athlete athlete){
-    this.athletes.remove(athlete);
+  public boolean removeFromAthlete(Athlete athlete) {
+    return this.athletes.remove(athlete);
   }
 
   public void removeFromAthlete(List<Athlete> athletes) {
     this.athletes.removeAll(athletes);
+  }
+
+  public boolean removeAtlheteById(Long athleteId) {
+    Athlete athlete = this.athletes.stream()
+        .filter(item -> item.getId().equals(athleteId))
+        .findFirst()
+        .orElse(null);
+
+    if (athlete == null) {
+      return false;
+    }
+
+    return this.removeFromAthlete(athlete);
   }
 
   @Override

@@ -20,5 +20,9 @@ public interface GymClassResource {
   Response getGymClass(Long gymClassId);
 
   Response updateGymClassAthletes(Long gymClassId, @Valid List<UpdateRequestModel<Long>> data);
+
+  Response addAthleteToGymClass(Long gymClassId, Long athleteId);
+
+  Response removeAthleteFromGymClass(Long gymClassId, Long athleteId);
   
 }

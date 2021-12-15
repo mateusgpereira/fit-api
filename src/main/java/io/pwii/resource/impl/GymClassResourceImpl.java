@@ -99,4 +99,24 @@ public class GymClassResourceImpl implements GymClassResource {
     return Response.ok(rest).build();
   }
 
+  @PATCH
+  @Path("/{gymClassId}/athletes/{athleteId}")
+  @Transactional
+  @Override
+  public Response addAthleteToGymClass(@PathParam("gymClassId") Long gymClassId, @PathParam("athleteId") Long athleteId) {
+    GymClass entity = gymClassService.addAthlete(gymClassId, athleteId);
+    GymClassRestModel rest = gymClassMapper.toRest(entity);
+    return Response.ok(rest).build();
+  }
+
+  @DELETE
+  @Path("/{gymClassId}/athletes/{athleteId}")
+  @Transactional
+  @Override
+  public Response removeAthleteFromGymClass(@PathParam("gymClassId") Long gymClassId, @PathParam("athleteId") Long athleteId) {
+    GymClass entity = gymClassService.deleteAthlete(gymClassId, athleteId);
+    GymClassRestModel rest = gymClassMapper.toRest(entity);
+    return Response.ok(rest).build();
+  }
+
 }
