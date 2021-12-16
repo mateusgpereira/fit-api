@@ -65,7 +65,8 @@ public class WorkoutResourceImpl implements WorkoutResource {
   @PUT
   @Path("/{workoutId}")
   @Override
-  public Response updateWorkout(@PathParam("workoutId") Long workoutId, WorkoutUpdateRequestModel workout) {
+  public Response updateWorkout(@PathParam("workoutId") Long workoutId,
+      WorkoutUpdateRequestModel workout) {
     Workout updated = workoutService.update(workoutId, workout);
     WorkoutRestModel rest = workoutMapper.toRest(updated);
     return Response.ok(rest).build();
@@ -97,6 +98,19 @@ public class WorkoutResourceImpl implements WorkoutResource {
     Workout entity = workoutService.updateExercises(workoutId, data);
     WorkoutRestModel rest = workoutMapper.toRest(entity);
 
+    return Response.ok(rest).build();
+  }
+
+  @DELETE
+  @PATCH
+  @Path("/{workoutId}/exercises/{exerciseId}")
+  @Transactional
+  @Override
+  public Response removeExerciseFromWorkout(@PathParam("workoutId") Long workoutId,
+      @PathParam("exerciseId") Long exerciseId) {
+    Workout entity = workoutService.removeExercise(workoutId, exerciseId);
+    WorkoutRestModel rest = workoutMapper.toRest(entity);
+    
     return Response.ok(rest).build();
   }
 

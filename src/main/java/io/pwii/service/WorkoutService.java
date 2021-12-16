@@ -20,5 +20,7 @@ public interface WorkoutService {
   Workout getById(Long workoutId);
 
   Workout updateExercises(Long workoutId, List<UpdateRequestModel<Long>> data);
+
+  Workout removeExercise(Long workoutId, Long exerciseId);
   
 }

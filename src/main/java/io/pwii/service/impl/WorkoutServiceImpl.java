@@ -175,6 +175,21 @@ public class WorkoutServiceImpl implements WorkoutService {
     return workout;
   }
 
+  @Transactional
+  @Override
+  public Workout removeExercise(Long workoutId, Long exerciseId) {
+    Workout entity = this.findWorkoutById(workoutId);
+
+    boolean wasRemoved = entity.removeExerciseById(exerciseId);
+    if (!wasRemoved) {
+      throw new BadRequestException("No exercise removed");
+    }
+
+    exerciseRepository.deleteById(exerciseId);
+    workoutRepository.persist(entity);
+    return entity;
+  }
+
   private Workout findWorkoutById(Long workoutId) throws NotFoundException {
     Optional<Workout> optionalWorkout = workoutRepository.findByIdOptional(workoutId);
     if (optionalWorkout.isEmpty()) {

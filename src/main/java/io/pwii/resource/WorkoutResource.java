@@ -21,4 +21,5 @@ public interface WorkoutResource {
 
   Response updateWorkoutExercises(Long workoutId, @Valid List<UpdateRequestModel<Long>> data);
 
+  Response removeExerciseFromWorkout(Long workoutId, Long exerciseId);
 }

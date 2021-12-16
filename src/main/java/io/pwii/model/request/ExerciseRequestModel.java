@@ -4,6 +4,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import io.pwii.entity.enums.WorkoutCategory;
+import io.smallrye.common.constraint.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,6 +34,8 @@ public class ExerciseRequestModel {
 
   private WorkoutCategory category;
 
+  @NotNull
+  @Min(value = 1)
   private Long workoutId;
   
 }
