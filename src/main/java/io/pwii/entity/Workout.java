@@ -2,7 +2,10 @@ package io.pwii.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -43,12 +46,55 @@ public class Workout {
   private Athlete athlete;
 
   @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL)
-  private List<Exercise> exercises;
+  private Set<Exercise> exercises = new HashSet<>();
 
   @CreationTimestamp
   private LocalDate createdAt;
 
   @UpdateTimestamp
   private LocalDateTime updatedAt;
-  
+
+  public void setExercises(Set<Exercise> exercises) {
+    this.exercises = exercises;
+  }
+
+  public void setExercises(List<Exercise> exercises) {
+    this.exercises = new HashSet<>(exercises);
+  }
+
+  public void addToExercises(Exercise exercise) {
+    if (this.exercises.add(exercise)) {
+      exercise.setWorkout(this);
+    }
+  }
+
+  public boolean removeFromExercises(Exercise exercise) {
+    return this.exercises.remove(exercise);
+  }
+
+  public void removeFromExercises(Collection<Exercise> exercises) {
+    this.exercises.removeAll(exercises);
+  }
+
+  public void addToExercises(List<Exercise> exercises) {
+    this.exercises.forEach(this::addToExercises);;
+  }
+
+  public boolean removeExerciseById(Long exerciseId) {
+    Exercise exercise = this.exercises.stream()
+        .filter(item -> item.getId().equals(exerciseId))
+        .findFirst()
+        .orElse(null);
+    
+    if (exercise == null) {
+      return false;
+    }
+
+    return this.removeFromExercises(exercise);
+  }
+
+  public void removeAllFromExercisesById(List<Long> exercisesIds) {
+    exercisesIds.forEach(this::removeExerciseById);
+  }
+
 }

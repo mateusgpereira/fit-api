@@ -16,6 +16,8 @@ import io.pwii.entity.Workout;
 import io.pwii.mapper.ExerciseMapper;
 import io.pwii.mapper.WorkoutMapper;
 import io.pwii.model.PageModel;
+import io.pwii.model.enums.UpdateOperations;
+import io.pwii.model.request.UpdateRequestModel;
 import io.pwii.model.request.WorkoutRequestModel;
 import io.pwii.model.request.WorkoutUpdateRequestModel;
 import io.pwii.repository.AthleteRepository;
@@ -103,17 +105,11 @@ public class WorkoutServiceImpl implements WorkoutService {
   @Transactional
   @Override
   public Workout update(Long workoutId, WorkoutUpdateRequestModel workout) {
-    Optional<Workout> optionalWorkout = workoutRepository.findByIdOptional(workoutId);
-
-    if (optionalWorkout.isEmpty()) {
-      throw new NotFoundException("Workout Not Found");
-    }
-
-    Workout entity = optionalWorkout.get();
+    Workout entity = this.findWorkoutById(workoutId);
     workoutMapper.updateToEntity(workout, entity);
 
     if (workout.getExercises().size() > 0) {
-      entity.setExercises(null);
+      entity.removeFromExercises(entity.getExercises());
       exerciseRepository.deleteAllByWorkoutId(workoutId);
       List<Exercise> exercises = workout.getExercises()
           .stream()
@@ -141,11 +137,49 @@ public class WorkoutServiceImpl implements WorkoutService {
 
   @Override
   public Workout getById(Long workoutId) {
+    return this.findWorkoutById(workoutId);
+  }
+
+  @Transactional
+  @Override
+  public Workout updateExercises(Long workoutId, List<UpdateRequestModel<Long>> data) {
+    Workout workout = this.findWorkoutById(workoutId);
+
+    if (data.size() < 1) {
+      throw new BadRequestException("Nothing To Update.");
+    }
+
+    data.forEach( item -> {
+      if (item.getValues().size() < 1) {
+        return;
+      }
+
+      if (item.getOperation() == UpdateOperations.REMOVE) {
+        workout.removeAllFromExercisesById(item.getValues());
+        exerciseRepository.deleteAllByIdIn(item.getValues());
+        return;
+      }
+
+      List<Exercise> exerciseList = exerciseRepository.findAllByIdsIn(item.getValues());
+      if (exerciseList.size() < 1) {
+        throw new BadRequestException("No valid items to " + item.getOperation().name());
+      }
+
+      if (item.getOperation() == UpdateOperations.ADD) {
+        workout.addToExercises(exerciseList);
+        return;
+      }
+    });
+
+    workoutRepository.persist(workout);
+    return workout;
+  }
+
+  private Workout findWorkoutById(Long workoutId) throws NotFoundException {
     Optional<Workout> optionalWorkout = workoutRepository.findByIdOptional(workoutId);
     if (optionalWorkout.isEmpty()) {
       throw new NotFoundException("Workout Not Found");
     }
-
     return optionalWorkout.get();
   }
 

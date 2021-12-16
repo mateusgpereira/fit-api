@@ -3,11 +3,13 @@ package io.pwii.resource.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
+import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -19,6 +21,7 @@ import javax.ws.rs.core.Response;
 import io.pwii.entity.Workout;
 import io.pwii.mapper.WorkoutMapper;
 import io.pwii.model.PageModel;
+import io.pwii.model.request.UpdateRequestModel;
 import io.pwii.model.request.WorkoutRequestModel;
 import io.pwii.model.request.WorkoutUpdateRequestModel;
 import io.pwii.model.response.WorkoutRestModel;
@@ -82,6 +85,18 @@ public class WorkoutResourceImpl implements WorkoutResource {
   public Response getWorkout(@PathParam("workoutId") Long workoutId) {
     Workout entity = workoutService.getById(workoutId);
     WorkoutRestModel rest = workoutMapper.toRest(entity);
+    return Response.ok(rest).build();
+  }
+
+  @PATCH
+  @Path("/{workoutId}/exercises")
+  @Transactional
+  @Override
+  public Response updateWorkoutExercises(@PathParam("workoutId") Long workoutId,
+      @Valid List<UpdateRequestModel<Long>> data) {
+    Workout entity = workoutService.updateExercises(workoutId, data);
+    WorkoutRestModel rest = workoutMapper.toRest(entity);
+
     return Response.ok(rest).build();
   }
 

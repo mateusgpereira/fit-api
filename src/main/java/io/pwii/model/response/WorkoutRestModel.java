@@ -2,7 +2,7 @@ package io.pwii.model.response;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 import io.pwii.entity.enums.WorkoutCategory;
 import io.pwii.entity.enums.WorkoutCode;
 import lombok.Getter;
@@ -22,7 +22,7 @@ public class WorkoutRestModel {
 
   private Long athleteId;
 
-  private List<ExerciseRestModel> exercises;
+  private Set<ExerciseRestModel> exercises;
 
   private LocalDate createdAt;
 

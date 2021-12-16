@@ -15,10 +15,16 @@ import javax.persistence.ManyToOne;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import io.pwii.entity.enums.WorkoutCategory;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Data
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Exercise {
 
   @Id
@@ -58,5 +64,50 @@ public class Exercise {
 
   @UpdateTimestamp
   private LocalDateTime updatedAt;
-  
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((category == null) ? 0 : category.hashCode());
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    result = prime * result + ((reps == null) ? 0 : reps.hashCode());
+    result = prime * result + ((sets == null) ? 0 : sets.hashCode());
+    result = prime * result + ((weight == null) ? 0 : weight.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    Exercise other = (Exercise) obj;
+    if (category != other.category)
+      return false;
+    if (id == null) {
+      if (other.id != null)
+        return false;
+    } else if (!id.equals(other.id))
+      return false;
+    if (reps == null) {
+      if (other.reps != null)
+        return false;
+    } else if (!reps.equals(other.reps))
+      return false;
+    if (sets == null) {
+      if (other.sets != null)
+        return false;
+    } else if (!sets.equals(other.sets))
+      return false;
+    if (weight == null) {
+      if (other.weight != null)
+        return false;
+    } else if (!weight.equals(other.weight))
+      return false;
+    return true;
+  }
 }
