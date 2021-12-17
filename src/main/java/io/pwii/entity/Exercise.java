@@ -56,7 +56,7 @@ public class Exercise {
   @Enumerated(EnumType.STRING)
   private WorkoutCategory category;
 
-  @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL )
+  @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.MERGE )
   private Workout workout;
 
   @CreationTimestamp
@@ -73,6 +73,7 @@ public class Exercise {
     result = prime * result + ((id == null) ? 0 : id.hashCode());
     result = prime * result + ((reps == null) ? 0 : reps.hashCode());
     result = prime * result + ((sets == null) ? 0 : sets.hashCode());
+    result = prime * result + ((title == null) ? 0 : title.hashCode());
     result = prime * result + ((weight == null) ? 0 : weight.hashCode());
     return result;
   }
@@ -102,6 +103,11 @@ public class Exercise {
       if (other.sets != null)
         return false;
     } else if (!sets.equals(other.sets))
+      return false;
+    if (title == null) {
+      if (other.title != null)
+        return false;
+    } else if (!title.equals(other.title))
       return false;
     if (weight == null) {
       if (other.weight != null)

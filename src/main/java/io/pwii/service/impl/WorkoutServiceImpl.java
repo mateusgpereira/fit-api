@@ -17,7 +17,9 @@ import io.pwii.mapper.ExerciseMapper;
 import io.pwii.mapper.WorkoutMapper;
 import io.pwii.model.PageModel;
 import io.pwii.model.enums.UpdateOperations;
+import io.pwii.model.request.ExerciseRequestModel;
 import io.pwii.model.request.UpdateRequestModel;
+import io.pwii.model.request.WorkoutExerciseUpdateRequestModel;
 import io.pwii.model.request.WorkoutRequestModel;
 import io.pwii.model.request.WorkoutUpdateRequestModel;
 import io.pwii.repository.AthleteRepository;
@@ -25,6 +27,7 @@ import io.pwii.repository.ExerciseRepository;
 import io.pwii.repository.InstructorRepository;
 import io.pwii.repository.WorkoutRepository;
 import io.pwii.service.WorkoutService;
+import io.pwii.validation.ModelValidator;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 
 @ApplicationScoped
@@ -50,6 +53,9 @@ public class WorkoutServiceImpl implements WorkoutService {
 
   @Inject
   Logger logger;
+
+  @Inject
+  private ModelValidator modelValidator;
 
   @Transactional
   @Override
@@ -142,31 +148,29 @@ public class WorkoutServiceImpl implements WorkoutService {
 
   @Transactional
   @Override
-  public Workout updateExercises(Long workoutId, List<UpdateRequestModel<Long>> data) {
+  public Workout updateExercises(Long workoutId,
+      List<WorkoutExerciseUpdateRequestModel> data) {
     Workout workout = this.findWorkoutById(workoutId);
 
     if (data.size() < 1) {
       throw new BadRequestException("Nothing To Update.");
     }
 
-    data.forEach( item -> {
-      if (item.getValues().size() < 1) {
+    this.validateWorkoutExercisesRequestBody(data);
+
+    data.forEach(item -> {
+      if (item.getOperation() == UpdateOperations.REMOVE && item.getIds().size() > 0) {
+        workout.removeAllFromExercisesById(item.getIds());
+        exerciseRepository.deleteAllByIdIn(item.getIds());
         return;
       }
 
-      if (item.getOperation() == UpdateOperations.REMOVE) {
-        workout.removeAllFromExercisesById(item.getValues());
-        exerciseRepository.deleteAllByIdIn(item.getValues());
-        return;
-      }
+      if (item.getOperation() == UpdateOperations.ADD && item.getValues().size() > 0) {
+        List<Exercise> entityList = item.getValues().stream()
+            .map(exerciseMapper::toEntity)
+            .collect(Collectors.toList());
 
-      List<Exercise> exerciseList = exerciseRepository.findAllByIdsIn(item.getValues());
-      if (exerciseList.size() < 1) {
-        throw new BadRequestException("No valid items to " + item.getOperation().name());
-      }
-
-      if (item.getOperation() == UpdateOperations.ADD) {
-        workout.addToExercises(exerciseList);
+        workout.addToExercises(entityList);
         return;
       }
     });
@@ -196,6 +200,15 @@ public class WorkoutServiceImpl implements WorkoutService {
       throw new NotFoundException("Workout Not Found");
     }
     return optionalWorkout.get();
+  }
+
+  private void validateWorkoutExercisesRequestBody(List<WorkoutExerciseUpdateRequestModel> data) {
+    data.forEach(item -> {
+      if (!item.validateProperties()) {
+        throw new BadRequestException(
+            "ids is mandatory for REMOVE operation | values is mandatory for ADD operation");
+      }
+    });
   }
 
 }

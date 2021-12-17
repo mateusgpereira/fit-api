@@ -54,6 +54,7 @@ public class Workout {
   @UpdateTimestamp
   private LocalDateTime updatedAt;
 
+
   public void setExercises(Set<Exercise> exercises) {
     this.exercises = exercises;
   }
@@ -77,7 +78,7 @@ public class Workout {
   }
 
   public void addToExercises(List<Exercise> exercises) {
-    this.exercises.forEach(this::addToExercises);;
+    exercises.forEach(this::addToExercises);
   }
 
   public boolean removeExerciseById(Long exerciseId) {

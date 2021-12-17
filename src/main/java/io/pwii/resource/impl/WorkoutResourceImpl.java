@@ -21,7 +21,9 @@ import javax.ws.rs.core.Response;
 import io.pwii.entity.Workout;
 import io.pwii.mapper.WorkoutMapper;
 import io.pwii.model.PageModel;
+import io.pwii.model.request.ExerciseRequestModel;
 import io.pwii.model.request.UpdateRequestModel;
+import io.pwii.model.request.WorkoutExerciseUpdateRequestModel;
 import io.pwii.model.request.WorkoutRequestModel;
 import io.pwii.model.request.WorkoutUpdateRequestModel;
 import io.pwii.model.response.WorkoutRestModel;
@@ -94,7 +96,7 @@ public class WorkoutResourceImpl implements WorkoutResource {
   @Transactional
   @Override
   public Response updateWorkoutExercises(@PathParam("workoutId") Long workoutId,
-      @Valid List<UpdateRequestModel<Long>> data) {
+      @Valid List<WorkoutExerciseUpdateRequestModel> data) {
     Workout entity = workoutService.updateExercises(workoutId, data);
     WorkoutRestModel rest = workoutMapper.toRest(entity);
 

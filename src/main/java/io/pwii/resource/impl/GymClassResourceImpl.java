@@ -50,13 +50,13 @@ public class GymClassResourceImpl implements GymClassResource {
   @GET
   @Override
   public Response listGymClasses(
-    @DefaultValue(value = "0") @QueryParam("page") int page,
-    @DefaultValue(value = "25") @QueryParam("limit") int limit) {
+      @DefaultValue(value = "0") @QueryParam("page") int page,
+      @DefaultValue(value = "25") @QueryParam("limit") int limit) {
     PageModel<GymClass> entityPage = gymClassService.list(page, limit);
     List<GymClassRestModel> listRest = entityPage.getContent()
-      .stream()
-      .map( entity -> gymClassMapper.toRest(entity))
-      .collect(Collectors.toList());
+        .stream()
+        .map(entity -> gymClassMapper.toRest(entity))
+        .collect(Collectors.toList());
     PageModel<GymClassRestModel> restPage = PageModel.mapPage(entityPage, listRest);
     return Response.ok(restPage).build();
   }
@@ -65,7 +65,8 @@ public class GymClassResourceImpl implements GymClassResource {
   @Path("/{gymClassId}")
   @Transactional
   @Override
-  public Response updateGymClass(@PathParam("gymClassId") Long gymClassId, GymClassUpdateRequestModel gymClass) {
+  public Response updateGymClass(@PathParam("gymClassId") Long gymClassId,
+      GymClassUpdateRequestModel gymClass) {
     GymClass updatedEntity = gymClassService.update(gymClassId, gymClass);
     GymClassRestModel updatedRest = gymClassMapper.toRest(updatedEntity);
     return Response.ok(updatedRest).build();
@@ -92,7 +93,8 @@ public class GymClassResourceImpl implements GymClassResource {
   @Path("/{gymClassId}/athletes")
   @Transactional
   @Override
-  public Response updateGymClassAthletes(@PathParam("gymClassId") Long gymClassId, @Valid List<UpdateRequestModel<Long>> data) {
+  public Response updateGymClassAthletes(@PathParam("gymClassId") Long gymClassId,
+      @Valid List<UpdateRequestModel<Long>> data) {
     GymClass entity = gymClassService.updateAthletes(gymClassId, data);
     GymClassRestModel rest = gymClassMapper.toRest(entity);
     return Response.ok(rest).build();
@@ -102,7 +104,8 @@ public class GymClassResourceImpl implements GymClassResource {
   @Path("/{gymClassId}/athletes/{athleteId}")
   @Transactional
   @Override
-  public Response addAthleteToGymClass(@PathParam("gymClassId") Long gymClassId, @PathParam("athleteId") Long athleteId) {
+  public Response addAthleteToGymClass(@PathParam("gymClassId") Long gymClassId,
+      @PathParam("athleteId") Long athleteId) {
     GymClass entity = gymClassService.addAthlete(gymClassId, athleteId);
     GymClassRestModel rest = gymClassMapper.toRest(entity);
     return Response.ok(rest).build();
@@ -112,7 +115,8 @@ public class GymClassResourceImpl implements GymClassResource {
   @Path("/{gymClassId}/athletes/{athleteId}")
   @Transactional
   @Override
-  public Response removeAthleteFromGymClass(@PathParam("gymClassId") Long gymClassId, @PathParam("athleteId") Long athleteId) {
+  public Response removeAthleteFromGymClass(@PathParam("gymClassId") Long gymClassId,
+      @PathParam("athleteId") Long athleteId) {
     GymClass entity = gymClassService.deleteAthlete(gymClassId, athleteId);
     GymClassRestModel rest = gymClassMapper.toRest(entity);
     return Response.ok(rest).build();

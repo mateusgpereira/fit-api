@@ -3,7 +3,7 @@ package io.pwii.resource;
 import java.util.List;
 import javax.validation.Valid;
 import javax.ws.rs.core.Response;
-import io.pwii.model.request.UpdateRequestModel;
+import io.pwii.model.request.WorkoutExerciseUpdateRequestModel;
 import io.pwii.model.request.WorkoutRequestModel;
 import io.pwii.model.request.WorkoutUpdateRequestModel;
 
@@ -19,7 +19,8 @@ public interface WorkoutResource {
 
   Response getWorkout(Long workoutId);
 
-  Response updateWorkoutExercises(Long workoutId, @Valid List<UpdateRequestModel<Long>> data);
+  Response updateWorkoutExercises(Long workoutId,
+      @Valid List<WorkoutExerciseUpdateRequestModel> data);
 
   Response removeExerciseFromWorkout(Long workoutId, Long exerciseId);
 }

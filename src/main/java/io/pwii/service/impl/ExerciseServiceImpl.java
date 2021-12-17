@@ -70,7 +70,7 @@ public class ExerciseServiceImpl implements ExerciseService {
     if (!wasDeleted) {
       throw new BadRequestException("Something went wrong");
     }
-    
+
   }
 
   @Override

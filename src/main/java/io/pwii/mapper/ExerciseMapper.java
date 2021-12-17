@@ -1,5 +1,6 @@
 package io.pwii.mapper;
 
+import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -23,5 +24,9 @@ public interface ExerciseMapper {
   void updateToEntity(ExerciseUpdateRequestModel model, @MappingTarget Exercise entity);
 
   Exercise updateToEntity(ExerciseUpdateRequestModel model);
+
+  List<Exercise> listModelToListEntity(List<ExerciseRequestModel> modelList);
+
+  ExerciseRequestModel fromObjectToRequestModel(Object obj);
   
 };
