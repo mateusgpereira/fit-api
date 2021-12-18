@@ -2,8 +2,6 @@ package io.pwii.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,9 +19,6 @@ public class Athlete extends User {
 
   @Column(precision = 6, scale = 3)
   private Double weight;
-
-  @ManyToOne(fetch = FetchType.LAZY)
-  private Instructor instructor;
 
   @Override
   public int hashCode() {

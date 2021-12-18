@@ -14,7 +14,5 @@ public class AthleteRestBriefModel {
   private String email;
 
   private String phone;
-
-  private Long instructorId;
   
 }

@@ -33,7 +33,5 @@ public class AthleteRest {
   private Integer height;
 
   private Double weight;
-
-  private Long instructorId;
   
 }

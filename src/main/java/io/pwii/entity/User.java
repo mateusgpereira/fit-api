@@ -3,22 +3,31 @@ package io.pwii.entity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DiscriminatorFormula;
 import org.hibernate.annotations.UpdateTimestamp;
+import io.pwii.entity.enums.UserRoles;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@MappedSuperclass
+
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity(name = "gym_user")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorFormula("CASE WHEN role = `INSTRUCTOR` THEN 1 ELSE 2 END")
 public class User {
 
   @Id
@@ -42,6 +51,10 @@ public class User {
 
   @Column(length = 12, nullable = false, unique = true)
   private String cpf;
+
+  @Enumerated(EnumType.STRING)
+  @Column(name = "user_role", nullable = false, length = 30)
+  private UserRoles role;
 
   @CreationTimestamp 
   private LocalDate createdAt;

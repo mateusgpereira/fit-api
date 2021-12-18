@@ -10,5 +10,5 @@ CREATE TABLE workout (
   instructor_id BIGINT
 );
 
-ALTER TABLE IF EXISTS workout ADD CONSTRAINT FK_workout_athlete FOREIGN KEY (athlete_id) REFERENCES athlete;
-ALTER TABLE IF EXISTS workout ADD CONSTRAINT FK_workout_instructor FOREIGN KEY (instructor_id) REFERENCES instructor;
+ALTER TABLE IF EXISTS workout ADD CONSTRAINT FK_workout_athlete FOREIGN KEY (athlete_id) REFERENCES gym_user(id);
+ALTER TABLE IF EXISTS workout ADD CONSTRAINT FK_workout_instructor FOREIGN KEY (instructor_id) REFERENCES gym_user(id);

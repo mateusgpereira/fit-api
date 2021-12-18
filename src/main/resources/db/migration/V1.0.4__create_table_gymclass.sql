@@ -13,11 +13,11 @@ CREATE TABLE gym_class (
   updatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE gym_class_Athlete (
-  GymClass_id BIGINT NOT NULL, 
+CREATE TABLE gym_class_gym_user (
+  gymClass_id BIGINT NOT NULL, 
   athletes_id BIGINT NOT NULL
 );
 
-ALTER TABLE IF EXISTS gym_class ADD CONSTRAINT FK_gym_class_instructor FOREIGN KEY (instructor_id) REFERENCES instructor;
-ALTER TABLE IF EXISTS gym_class_Athlete ADD CONSTRAINT FK_gym_class_athlete_athlete FOREIGN KEY (athletes_id) REFERENCES Athlete;
-ALTER TABLE IF EXISTS gym_class_Athlete ADD CONSTRAINT FK_gym_class_atlhete_gymclass FOREIGN KEY (GymClass_id) REFERENCES gym_class;
+ALTER TABLE IF EXISTS gym_class ADD CONSTRAINT FK_gym_class_instructor FOREIGN KEY (instructor_id) REFERENCES gym_user(id);
+ALTER TABLE IF EXISTS gym_class_gym_user ADD CONSTRAINT FK_gym_class_athlete_athlete FOREIGN KEY (athletes_id) REFERENCES gym_user(id);
+ALTER TABLE IF EXISTS gym_class_gym_user ADD CONSTRAINT FK_gym_class_atlhete_gymclass FOREIGN KEY (gymClass_id) REFERENCES gym_class;

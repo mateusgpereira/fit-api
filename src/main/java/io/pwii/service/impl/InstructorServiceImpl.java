@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import io.pwii.entity.Instructor;
+import io.pwii.entity.enums.UserRoles;
 import io.pwii.mapper.InstructorMapper;
 import io.pwii.model.InstructorRest;
 import io.pwii.model.InstructorUpdateRequest;
@@ -31,6 +32,7 @@ public class InstructorServiceImpl implements InstructorService {
   public Instructor create(InstructorRest model) {
     Instructor entity = instructorMapper.toEntity(model);
     entity.setPassword(BcryptUtil.bcryptHash(entity.getPassword()));
+    entity.setRole(UserRoles.INSTRUCTOR);
     instructorRepository.persist(entity);
     return entity;
   }

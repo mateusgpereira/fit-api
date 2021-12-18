@@ -27,7 +27,5 @@ public class AthleteUpdateRequest {
   private Integer height;
 
   private Double weight;
-
-  private Long instructorId;
   
 }

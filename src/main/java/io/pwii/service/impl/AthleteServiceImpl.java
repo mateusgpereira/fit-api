@@ -8,7 +8,7 @@ import javax.transaction.Transactional;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import io.pwii.entity.Athlete;
-import io.pwii.entity.Instructor;
+import io.pwii.entity.enums.UserRoles;
 import io.pwii.mapper.AthleteMapper;
 import io.pwii.model.AthleteRest;
 import io.pwii.model.AthleteUpdateRequest;
@@ -37,15 +37,7 @@ public class AthleteServiceImpl implements AthleteService {
     Athlete athleteEntity = athleteMapper.toEntity(athlete);
     athleteEntity.setPassword(BcryptUtil.bcryptHash(athlete.getPassword()));
 
-    if (athlete.getInstructorId() != null) {
-      Optional<Instructor> instructorOptional =
-          instructorRepository.findByIdOptional(athlete.getInstructorId());
-
-      if (instructorOptional.isPresent()) {
-        athleteEntity.setInstructor(instructorOptional.get());
-      }
-    }
-
+    athleteEntity.setRole(UserRoles.ATHLETE);
     athleteRepository.persist(athleteEntity);
     return athleteEntity;
   }
@@ -76,14 +68,6 @@ public class AthleteServiceImpl implements AthleteService {
 
     if (athlete.getPassword() != null && !athlete.getPassword().isEmpty()) {
       entity.setPassword(BcryptUtil.bcryptHash(athlete.getPassword()));
-    }
-
-    if (athlete.getInstructorId() != null) {
-      Optional<Instructor> optionalInstructor = instructorRepository.findByIdOptional(athlete.getInstructorId());
-
-      if (optionalInstructor.isPresent()) {
-        entity.setInstructor(optionalInstructor.get());
-      }
     }
 
     athleteRepository.persist(entity);
