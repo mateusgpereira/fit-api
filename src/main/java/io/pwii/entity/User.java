@@ -27,7 +27,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity(name = "gym_user")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorFormula("CASE WHEN role = `INSTRUCTOR` THEN 1 ELSE 2 END")
+@DiscriminatorFormula("CASE WHEN user_role = 'INSTRUCTOR' THEN 1 ELSE 2 END")
 public class User {
 
   @Id
