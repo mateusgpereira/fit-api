@@ -18,9 +18,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import io.pwii.entity.Instructor;
 import io.pwii.mapper.InstructorMapper;
-import io.pwii.model.InstructorRest;
 import io.pwii.model.InstructorUpdateRequest;
 import io.pwii.model.PageModel;
+import io.pwii.model.request.InstructorRequestModel;
+import io.pwii.model.response.InstructorRestModel;
 import io.pwii.resource.InstructorResource;
 import io.pwii.service.InstructorService;
 
@@ -37,9 +38,9 @@ public class InstructorResourceImpl implements InstructorResource {
 
   @POST
   @Override
-  public Response createInstructor(@Valid InstructorRest model) {
+  public Response createInstructor(@Valid InstructorRequestModel model) {
     final Instructor created = instructorService.create(model);
-    InstructorRest createdRest = instructorMapper.toRest(created);
+    InstructorRestModel createdRest = instructorMapper.toRest(created);
     return Response.status(Response.Status.CREATED).entity(createdRest).build();
   }
 
@@ -49,11 +50,11 @@ public class InstructorResourceImpl implements InstructorResource {
       @DefaultValue("0") @QueryParam("page") int page,
       @DefaultValue("25") @QueryParam("limit") int limit) {
     PageModel<Instructor> entityPage = instructorService.list(page, limit);
-    List<InstructorRest> list = entityPage.getContent().stream()
+    List<InstructorRestModel> list = entityPage.getContent().stream()
         .map(entity -> instructorMapper.toRest(entity))
         .collect(Collectors.toList());
 
-    PageModel<InstructorRest> restPage = PageModel.<InstructorRest>mapPage(entityPage, list);
+    PageModel<InstructorRestModel> restPage = PageModel.<InstructorRestModel>mapPage(entityPage, list);
 
     return Response.ok(restPage).build();
   }
@@ -65,7 +66,7 @@ public class InstructorResourceImpl implements InstructorResource {
       @PathParam("instructorId") Long instructorId,
       @Valid InstructorUpdateRequest model) {
     Instructor entity = instructorService.update(instructorId, model);
-    InstructorRest instructorRest = instructorMapper.toRest(entity);
+    InstructorRestModel instructorRest = instructorMapper.toRest(entity);
     
     return Response.ok(instructorRest).build();
   }
@@ -83,7 +84,7 @@ public class InstructorResourceImpl implements InstructorResource {
   @Override
   public Response getInstructor(@PathParam("instructorId") Long instructorId) {
     Instructor entity = instructorService.getById(instructorId);
-    InstructorRest rest = instructorMapper.toRest(entity);
+    InstructorRestModel rest = instructorMapper.toRest(entity);
     return Response.ok(rest).build();
   }
 

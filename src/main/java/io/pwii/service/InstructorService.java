@@ -1,13 +1,13 @@
 package io.pwii.service;
 
 import io.pwii.entity.Instructor;
-import io.pwii.model.InstructorRest;
 import io.pwii.model.InstructorUpdateRequest;
 import io.pwii.model.PageModel;
+import io.pwii.model.request.InstructorRequestModel;
 
 public interface InstructorService {
 
-  Instructor create(InstructorRest model);
+  Instructor create(InstructorRequestModel model);
 
   PageModel<Instructor> list(int page, int limit);
 

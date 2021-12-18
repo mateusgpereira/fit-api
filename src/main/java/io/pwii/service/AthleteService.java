@@ -1,13 +1,13 @@
 package io.pwii.service;
 
 import io.pwii.entity.Athlete;
-import io.pwii.model.AthleteRest;
-import io.pwii.model.AthleteUpdateRequest;
 import io.pwii.model.PageModel;
+import io.pwii.model.request.AthleteRequestModel;
+import io.pwii.model.request.AthleteUpdateRequest;
 
 public interface AthleteService {
 
-  Athlete create(AthleteRest athlete);
+  Athlete create(AthleteRequestModel athlete);
 
   PageModel<Athlete> list(int page, int limit);
 

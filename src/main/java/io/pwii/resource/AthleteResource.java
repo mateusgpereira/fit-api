@@ -2,12 +2,12 @@ package io.pwii.resource;
 
 import javax.validation.Valid;
 import javax.ws.rs.core.Response;
-import io.pwii.model.AthleteRest;
-import io.pwii.model.AthleteUpdateRequest;
+import io.pwii.model.request.AthleteRequestModel;
+import io.pwii.model.request.AthleteUpdateRequest;
 
 public interface AthleteResource {
 
-  Response createAthlete(@Valid AthleteRest model);
+  Response createAthlete(@Valid AthleteRequestModel model);
 
   Response listAthletes(int page, int limit);
 

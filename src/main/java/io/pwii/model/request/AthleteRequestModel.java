@@ -1,4 +1,4 @@
-package io.pwii.model;
+package io.pwii.model.request;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
@@ -7,11 +7,9 @@ import org.hibernate.validator.constraints.br.CPF;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
 @Setter
-public class AthleteRest {
-
-  private Long id;
+@Getter
+public class AthleteRequestModel {
 
   @NotBlank
   private String name;

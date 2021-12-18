@@ -19,9 +19,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import io.pwii.entity.Athlete;
 import io.pwii.mapper.AthleteMapper;
-import io.pwii.model.AthleteRest;
-import io.pwii.model.AthleteUpdateRequest;
 import io.pwii.model.PageModel;
+import io.pwii.model.request.AthleteRequestModel;
+import io.pwii.model.request.AthleteUpdateRequest;
+import io.pwii.model.response.AthleteRestModel;
 import io.pwii.resource.AthleteResource;
 import io.pwii.service.AthleteService;
 
@@ -39,9 +40,9 @@ public class AthleteResourceImpl implements AthleteResource {
   @POST
   @Transactional
   @Override
-  public Response createAthlete(@Valid AthleteRest model) {
+  public Response createAthlete(@Valid AthleteRequestModel model) {
     Athlete createdEntity = athleteService.create(model);
-    AthleteRest createdRest = athleteMapper.toRest(createdEntity);
+    AthleteRestModel createdRest = athleteMapper.toRest(createdEntity);
 
     return Response.status(Response.Status.CREATED).entity(createdRest).build();
   }
@@ -54,11 +55,11 @@ public class AthleteResourceImpl implements AthleteResource {
     @DefaultValue("25") @QueryParam("limit") int limit
   ) {
     PageModel<Athlete> entityPage = athleteService.list(page, limit);
-    List<AthleteRest> listRest = entityPage.getContent().stream()
+    List<AthleteRestModel> listRest = entityPage.getContent().stream()
         .map(entity -> athleteMapper.toRest(entity))
         .collect(Collectors.toList());
 
-    PageModel<AthleteRest> pageRest = PageModel.mapPage(entityPage, listRest);
+    PageModel<AthleteRestModel> pageRest = PageModel.mapPage(entityPage, listRest);
 
     return Response.ok(pageRest).build();
   }
@@ -69,7 +70,7 @@ public class AthleteResourceImpl implements AthleteResource {
   @Override
   public Response updateAthlete(@PathParam("athleteId") Long athleteId, @Valid AthleteUpdateRequest model) {
     Athlete entity = athleteService.update(athleteId, model);
-    AthleteRest rest = athleteMapper.toRest(entity);
+    AthleteRestModel rest = athleteMapper.toRest(entity);
     return Response.ok(rest).build();
   }
 
@@ -88,7 +89,7 @@ public class AthleteResourceImpl implements AthleteResource {
   @Override
   public Response getAthlete(@PathParam("athleteId") Long athleteId) {
     Athlete entity = athleteService.getById(athleteId);
-    AthleteRest rest = athleteMapper.toRest(entity);
+    AthleteRestModel rest = athleteMapper.toRest(entity);
     return Response.ok(rest).build();
   }
 

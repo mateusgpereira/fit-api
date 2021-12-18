@@ -10,9 +10,9 @@ import javax.ws.rs.NotFoundException;
 import io.pwii.entity.Instructor;
 import io.pwii.entity.enums.UserRoles;
 import io.pwii.mapper.InstructorMapper;
-import io.pwii.model.InstructorRest;
 import io.pwii.model.InstructorUpdateRequest;
 import io.pwii.model.PageModel;
+import io.pwii.model.request.InstructorRequestModel;
 import io.pwii.repository.InstructorRepository;
 import io.pwii.service.InstructorService;
 import io.quarkus.elytron.security.common.BcryptUtil;
@@ -29,7 +29,7 @@ public class InstructorServiceImpl implements InstructorService {
 
   @Transactional
   @Override
-  public Instructor create(InstructorRest model) {
+  public Instructor create(InstructorRequestModel model) {
     Instructor entity = instructorMapper.toEntity(model);
     entity.setPassword(BcryptUtil.bcryptHash(entity.getPassword()));
     entity.setRole(UserRoles.INSTRUCTOR);

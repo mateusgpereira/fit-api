@@ -4,8 +4,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import io.pwii.entity.Athlete;
-import io.pwii.model.AthleteRest;
-import io.pwii.model.AthleteUpdateRequest;
+import io.pwii.model.request.AthleteRequestModel;
+import io.pwii.model.request.AthleteUpdateRequest;
+import io.pwii.model.response.AthleteRestModel;
 import io.pwii.model.response.AthleteRestBriefModel;
 
 @Mapper(
@@ -13,9 +14,9 @@ import io.pwii.model.response.AthleteRestBriefModel;
     nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface AthleteMapper {
 
-  AthleteRest toRest(Athlete entity);
+  AthleteRestModel toRest(Athlete entity);
 
-  Athlete toEntity(AthleteRest rest);
+  Athlete toEntity(AthleteRequestModel rest);
 
   Athlete updateToEntity(AthleteUpdateRequest model, @MappingTarget Athlete entity);
 

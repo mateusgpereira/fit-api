@@ -4,8 +4,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import io.pwii.entity.Instructor;
-import io.pwii.model.InstructorRest;
 import io.pwii.model.InstructorUpdateRequest;
+import io.pwii.model.request.InstructorRequestModel;
+import io.pwii.model.response.InstructorRestModel;
 import io.pwii.model.response.InstructorRestBriefModel;
 
 @Mapper(
@@ -13,9 +14,9 @@ import io.pwii.model.response.InstructorRestBriefModel;
     nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface InstructorMapper {
 
-  Instructor toEntity(InstructorRest model);
+  Instructor toEntity(InstructorRequestModel model);
 
-  InstructorRest toRest(Instructor entity);
+  InstructorRestModel toRest(Instructor entity);
 
   void updateToEntity(InstructorUpdateRequest model, @MappingTarget Instructor entity);
 

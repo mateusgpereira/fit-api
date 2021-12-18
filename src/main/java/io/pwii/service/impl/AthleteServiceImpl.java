@@ -10,9 +10,10 @@ import javax.ws.rs.NotFoundException;
 import io.pwii.entity.Athlete;
 import io.pwii.entity.enums.UserRoles;
 import io.pwii.mapper.AthleteMapper;
-import io.pwii.model.AthleteRest;
-import io.pwii.model.AthleteUpdateRequest;
 import io.pwii.model.PageModel;
+import io.pwii.model.request.AthleteRequestModel;
+import io.pwii.model.request.AthleteUpdateRequest;
+import io.pwii.model.response.AthleteRestModel;
 import io.pwii.repository.AthleteRepository;
 import io.pwii.repository.InstructorRepository;
 import io.pwii.service.AthleteService;
@@ -32,7 +33,7 @@ public class AthleteServiceImpl implements AthleteService {
   AthleteMapper athleteMapper;
 
   @Override
-  public Athlete create(AthleteRest athlete) {
+  public Athlete create(AthleteRequestModel athlete) {
 
     Athlete athleteEntity = athleteMapper.toEntity(athlete);
     athleteEntity.setPassword(BcryptUtil.bcryptHash(athlete.getPassword()));

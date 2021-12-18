@@ -1,4 +1,4 @@
-package io.pwii.model;
+package io.pwii.model.request;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
