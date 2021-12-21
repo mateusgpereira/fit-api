@@ -10,7 +10,7 @@ public class DuplicateItemException implements ExceptionMapper<PersistenceExcept
 
   @Override
   public Response toResponse(PersistenceException exception) {
-    System.out.println(exception.getClass());
+    
     return Response
       .status(Response.Status.BAD_REQUEST)
       .entity(new ErrorMessage(exception.getMessage()))

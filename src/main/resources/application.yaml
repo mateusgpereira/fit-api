@@ -7,6 +7,7 @@ quarkus:
   hibernate-orm:
     database:
       generation: none
+      
 
 # Test Profile
 "%test":
@@ -42,3 +43,17 @@ quarkus:
     flyway:
       migrate-at-start: true
       locations: db/migration,db/testdata
+    native:
+      resources:
+        includes: publickey.pem
+  smallrye:
+    jwt:
+      sign:
+        key:
+          location: privatekey.pem
+  mp:
+    jwt:
+      verify:
+        publickey:
+          location: publickey.pem
+        issuer: http://localhost:8080

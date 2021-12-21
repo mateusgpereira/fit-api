@@ -2,6 +2,8 @@ package io.pwii.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -97,6 +99,16 @@ public class User {
     } else if (!id.equals(other.id))
       return false;
     return true;
+  }
+
+  public Set<String> getGroupsByRole() {
+    Set<String> groups = new HashSet<>();
+    if (this.role == UserRoles.INSTRUCTOR) {
+      groups.add(UserRoles.INSTRUCTOR.name());
+    }
+
+    groups.add(UserRoles.ATHLETE.name());
+    return groups;
   }
   
 }
