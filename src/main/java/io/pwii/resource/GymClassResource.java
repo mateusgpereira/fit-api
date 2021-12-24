@@ -3,26 +3,27 @@ package io.pwii.resource;
 import java.util.List;
 import javax.validation.Valid;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import io.pwii.model.request.GymClassRequestModel;
 import io.pwii.model.request.GymClassUpdateRequestModel;
 import io.pwii.model.request.UpdateRequestModel;
 
 public interface GymClassResource {
 
-  Response createGymClass(@Valid GymClassRequestModel gymClass);
+  Response createGymClass(SecurityContext ctx, @Valid GymClassRequestModel gymClass);
 
-  Response listGymClasses(int page, int limit);
+  Response listGymClasses(SecurityContext ctx, int page, int limit);
 
-  Response updateGymClass(Long gymClassId, GymClassUpdateRequestModel gymClass);
+  Response updateGymClass(SecurityContext ctx, Long gymClassId, GymClassUpdateRequestModel gymClass);
 
-  Response deleteGymClass(Long gymClassId);
+  Response deleteGymClass(SecurityContext ctx, Long gymClassId);
 
-  Response getGymClass(Long gymClassId);
+  Response getGymClass(SecurityContext ctx, Long gymClassId);
 
-  Response updateGymClassAthletes(Long gymClassId, @Valid List<UpdateRequestModel<Long>> data);
+  Response updateGymClassAthletes(SecurityContext ctx, Long gymClassId, @Valid List<UpdateRequestModel<Long>> data);
 
-  Response addAthleteToGymClass(Long gymClassId, Long athleteId);
+  Response addAthleteToGymClass(SecurityContext ctx, Long gymClassId, Long athleteId);
 
-  Response removeAthleteFromGymClass(Long gymClassId, Long athleteId);
+  Response removeAthleteFromGymClass(SecurityContext ctx, Long gymClassId, Long athleteId);
   
 }

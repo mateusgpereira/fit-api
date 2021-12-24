@@ -3,24 +3,25 @@ package io.pwii.resource;
 import java.util.List;
 import javax.validation.Valid;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import io.pwii.model.request.WorkoutExerciseUpdateRequestModel;
 import io.pwii.model.request.WorkoutRequestModel;
 import io.pwii.model.request.WorkoutUpdateRequestModel;
 
 public interface WorkoutResource {
 
-  Response createWorkout(@Valid WorkoutRequestModel workout);
+  Response createWorkout(SecurityContext ctx, @Valid WorkoutRequestModel workout);
 
-  Response listWorkouts(int page, int limit);
+  Response listWorkouts(SecurityContext ctx, int page, int limit);
 
-  Response updateWorkout(Long workoutId, WorkoutUpdateRequestModel workout);
+  Response updateWorkout(SecurityContext ctx, Long workoutId, WorkoutUpdateRequestModel workout);
 
-  Response deleteWorkouts(Long workoutId);
+  Response deleteWorkouts(SecurityContext ctx, Long workoutId);
 
-  Response getWorkout(Long workoutId);
+  Response getWorkout(SecurityContext ctx, Long workoutId);
 
-  Response updateWorkoutExercises(Long workoutId,
+  Response updateWorkoutExercises(SecurityContext ctx, Long workoutId,
       @Valid List<WorkoutExerciseUpdateRequestModel> data);
 
-  Response removeExerciseFromWorkout(Long workoutId, Long exerciseId);
+  Response removeExerciseFromWorkout(SecurityContext ctx, Long workoutId, Long exerciseId);
 }

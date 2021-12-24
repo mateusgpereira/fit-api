@@ -2,19 +2,20 @@ package io.pwii.resource;
 
 import javax.validation.Valid;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import io.pwii.model.request.ExerciseRequestModel;
 import io.pwii.model.request.ExerciseUpdateRequestModel;
 
 public interface ExerciseResource {
 
-  Response createExercise(@Valid ExerciseRequestModel exercise);
+  Response createExercise(SecurityContext ctx, @Valid ExerciseRequestModel exercise);
 
-  Response listExercises(int page, int limit);
+  Response listExercises(SecurityContext ctx, int page, int limit);
 
-  Response updateExercise(Long exerciseId, @Valid ExerciseUpdateRequestModel exercise);
+  Response updateExercise(SecurityContext ctx, Long exerciseId, @Valid ExerciseUpdateRequestModel exercise);
 
-  Response deleteExercise(Long exerciseId);
+  Response deleteExercise(SecurityContext ctx, Long exerciseId);
 
-  Response getExercise(Long exerciseId);
+  Response getExercise(SecurityContext ctx, Long exerciseId);
   
 }

@@ -22,6 +22,9 @@ public class UserServiceImpl implements UserService {
   @ConfigProperty(name = "mp.jwt.verify.issuer")
   private String issuer;
 
+  @ConfigProperty(name = "fitsystem.config.token.expirationInSecs")
+  private Long tokenExpiration;
+
   @Override
   public String login(UserLoginRequest userLoginRequest) {
     Optional<User> optionalUser = userRepository.findOneByEmail(userLoginRequest.getEmail());
@@ -40,6 +43,7 @@ public class UserServiceImpl implements UserService {
         .upn(user.getEmail())
         .groups(user.getGroupsByRole())
         .claim(Claims.birthdate.name(), "2021-12-21")
+        .expiresIn(tokenExpiration)
         .sign();
   }
 

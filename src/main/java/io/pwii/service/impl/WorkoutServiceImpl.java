@@ -17,8 +17,7 @@ import io.pwii.mapper.ExerciseMapper;
 import io.pwii.mapper.WorkoutMapper;
 import io.pwii.model.PageModel;
 import io.pwii.model.enums.UpdateOperations;
-import io.pwii.model.request.ExerciseRequestModel;
-import io.pwii.model.request.UpdateRequestModel;
+import io.pwii.model.request.ExerciseUpdateRequestModel;
 import io.pwii.model.request.WorkoutExerciseUpdateRequestModel;
 import io.pwii.model.request.WorkoutRequestModel;
 import io.pwii.model.request.WorkoutUpdateRequestModel;
@@ -114,7 +113,8 @@ public class WorkoutServiceImpl implements WorkoutService {
     Workout entity = this.findWorkoutById(workoutId);
     workoutMapper.updateToEntity(workout, entity);
 
-    if (workout.getExercises().size() > 0) {
+    List<ExerciseUpdateRequestModel> exercisesToUpdate = workout.getExercises();
+    if (exercisesToUpdate != null && exercisesToUpdate.size() > 0) {
       entity.removeFromExercises(entity.getExercises());
       exerciseRepository.deleteAllByWorkoutId(workoutId);
       List<Exercise> exercises = workout.getExercises()

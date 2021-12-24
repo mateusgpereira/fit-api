@@ -57,3 +57,7 @@ quarkus:
         publickey:
           location: publickey.pem
         issuer: http://localhost:8080
+  fitsystem:
+    config:
+      token:
+        expirationInSecs: 86400

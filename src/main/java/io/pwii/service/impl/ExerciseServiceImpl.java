@@ -8,11 +8,13 @@ import javax.transaction.Transactional;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import io.pwii.entity.Exercise;
+import io.pwii.entity.Workout;
 import io.pwii.mapper.ExerciseMapper;
 import io.pwii.model.PageModel;
 import io.pwii.model.request.ExerciseRequestModel;
 import io.pwii.model.request.ExerciseUpdateRequestModel;
 import io.pwii.repository.ExerciseRepository;
+import io.pwii.repository.WorkoutRepository;
 import io.pwii.service.ExerciseService;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 
@@ -25,11 +27,20 @@ public class ExerciseServiceImpl implements ExerciseService {
   @Inject
   private ExerciseMapper exerciseMapper;
 
+  @Inject
+  private WorkoutRepository workoutRepository;
+
   @Transactional
   @Override
   public Exercise create(ExerciseRequestModel exercise) {
     Exercise entity = exerciseMapper.toEntity(exercise);
 
+    Optional<Workout> optionalWorkout = workoutRepository.findByIdOptional(exercise.getWorkoutId());
+    if (optionalWorkout.isEmpty()) {
+      throw new BadRequestException("Invalid Workout");
+    }
+
+    entity.setWorkout(optionalWorkout.get());
     exerciseRepository.persist(entity);
 
     return entity;
