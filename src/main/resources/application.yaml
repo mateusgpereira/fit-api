@@ -46,11 +46,23 @@ quarkus:
     native:
       resources:
         includes: publickey.pem
+    smallrye-openapi:
+      info-title: FitSystem API (DEV)
+      info-version: 1.0.0
+      info-description: API for FIT SYSTEM management
+      info-contact-email: mateusgoncalvespereira@gmail.com
+      info-contact-name: Mateus
+      info-contact-url: https://github.com/mateusgpereira/
+      info-license-name: Apache 2.0
+      info-license-url: https://www.apache.org/licenses/LICENSE-2.0.html
+    swagger-ui:
+      always-include: true
   smallrye:
     jwt:
       sign:
         key:
           location: privatekey.pem
+  
   mp:
     jwt:
       verify:

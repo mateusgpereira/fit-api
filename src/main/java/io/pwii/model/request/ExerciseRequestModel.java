@@ -3,6 +3,7 @@ package io.pwii.model.request;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import io.pwii.entity.enums.WorkoutCategory;
 import io.smallrye.common.constraint.NotNull;
 import lombok.Getter;
@@ -32,10 +33,13 @@ public class ExerciseRequestModel {
 
   private String equipment;
 
+  @NotNull
+  @Schema(required = true)
   private WorkoutCategory category;
 
   @NotNull
   @Min(value = 1)
+  @Schema(required = true)
   private Long workoutId;
   
 }
