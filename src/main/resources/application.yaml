@@ -23,6 +23,22 @@ quarkus:
     flyway:
       migrate-at-start: true
       locations: db/migration,db/testdata
+  smallrye:
+    jwt:
+      sign:
+        key:
+          location: privatekey.pem
+  
+  mp:
+    jwt:
+      verify:
+        publickey:
+          location: publickey.pem
+        issuer: http://localhost:8080
+  fitsystem:
+    config:
+      token:
+        expirationInSecs: 86400
 
 # Dev Profile
 "%dev":
