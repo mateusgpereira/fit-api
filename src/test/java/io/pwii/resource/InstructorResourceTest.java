@@ -5,19 +5,22 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.mockito.Mockito.when;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import io.pwii.entity.Instructor;
 import io.pwii.model.PageModel;
 import io.pwii.model.request.InstructorRequestModel;
+import io.pwii.model.request.InstructorUpdateRequestModel;
 import io.pwii.model.response.InstructorRestModel;
+import io.pwii.resource.impl.InstructorResourceImpl;
 import io.pwii.service.impl.InstructorServiceImpl;
+import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
@@ -25,13 +28,13 @@ import io.quarkus.test.security.TestSecurity;
 import io.restassured.http.ContentType;
 
 @QuarkusTest
+@TestHTTPEndpoint(InstructorResourceImpl.class)
 public class InstructorResourceTest {
-
-  @TestHTTPResource("/v1/instructors")
-  URL instructorEndpoint;
 
   @InjectMock
   InstructorServiceImpl instructorService;
+
+  Gson gson = new Gson();
 
   private InstructorRequestModel johnRequestModel = InstructorRequestModel.builder()
       .name("John")
@@ -106,7 +109,7 @@ public class InstructorResourceTest {
     given()
         .contentType(ContentType.JSON)
         .body(new InstructorRequestModel())
-        .when().post(instructorEndpoint)
+        .when().post()
         .then()
         .statusCode(400);
   }
@@ -116,7 +119,7 @@ public class InstructorResourceTest {
     InstructorRestModel result = given()
         .contentType(ContentType.JSON)
         .body(johnRequestModel)
-        .when().post(instructorEndpoint)
+        .when().post()
         .then()
         .statusCode(201)
         .body("size()", is(8))
@@ -131,7 +134,7 @@ public class InstructorResourceTest {
     PageModel<InstructorRestModel> result = given()
         .contentType(ContentType.JSON)
         .params("page", "0", "limit", "25")
-        .when().get(instructorEndpoint)
+        .when().get()
         .then()
         .statusCode(200)
         .body("size()", is(5))
@@ -144,9 +147,40 @@ public class InstructorResourceTest {
   public void shouldNotListInstructorsWhenNotAuthenticated() {
     given()
         .contentType(ContentType.JSON)
-        .when().get(instructorEndpoint)
+        .when().get()
         .then()
         .statusCode(401);
+  }
+
+  @Test
+  @TestSecurity(user = "jonh@test.com", roles = {"INSTRUCTOR", "ATHLETE"})
+  public void shouldUpdateInstructorPhoneAndName() {
+    InstructorUpdateRequestModel updateRequestModel = new InstructorUpdateRequestModel();
+    updateRequestModel.setName("John Smith");
+    updateRequestModel.setPhone("351991563248");
+
+    Instructor updatedEntity = gson.fromJson(gson.toJson(johnEntity), Instructor.class);
+    updatedEntity.setName("John Smith");
+    updatedEntity.setPhone("351991563248");
+
+    when(instructorService.update(1L, updateRequestModel)).thenReturn(updatedEntity);
+
+    InstructorRestModel expectedModel =
+        gson.fromJson(gson.toJson(johnRestModel), InstructorRestModel.class);
+    expectedModel.setName("John Smith");
+    expectedModel.setPhone("351991563248");
+
+    InstructorRestModel result = given()
+        .contentType(ContentType.JSON)
+        .body(updateRequestModel)
+        .when().put("/{instructorId}", 1)
+        .then()
+        .statusCode(200)
+        .body("size()", is(8))
+        .extract()
+        .as(InstructorRestModel.class);
+
+    assertThat(result, equalTo(expectedModel));
   }
 
 

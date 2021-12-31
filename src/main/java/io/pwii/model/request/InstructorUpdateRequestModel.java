@@ -1,14 +1,16 @@
-package io.pwii.model;
+package io.pwii.model.request;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
-public class InstructorUpdateRequest {
+@EqualsAndHashCode
+public class InstructorUpdateRequestModel {
 
   @Size(min = 3, max = 50)
   private String name;
@@ -19,6 +21,7 @@ public class InstructorUpdateRequest {
   @Min(value = 16)
   private Integer age;
 
+  @Size(min = 6)
   private String password;
 
   @Size(min = 8, max = 20)

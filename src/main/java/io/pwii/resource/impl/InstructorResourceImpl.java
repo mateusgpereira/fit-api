@@ -23,9 +23,9 @@ import javax.ws.rs.core.SecurityContext;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import io.pwii.entity.Instructor;
 import io.pwii.mapper.InstructorMapper;
-import io.pwii.model.InstructorUpdateRequest;
 import io.pwii.model.PageModel;
 import io.pwii.model.request.InstructorRequestModel;
+import io.pwii.model.request.InstructorUpdateRequestModel;
 import io.pwii.model.response.InstructorRestModel;
 import io.pwii.resource.InstructorResource;
 import io.pwii.service.InstructorService;
@@ -78,7 +78,7 @@ public class InstructorResourceImpl implements InstructorResource {
   public Response updateInstructor(
       @Context SecurityContext ctx,
       @PathParam("instructorId") Long instructorId,
-      @Valid InstructorUpdateRequest model) {
+      @Valid InstructorUpdateRequestModel model) {
     Instructor entity = instructorService.update(instructorId, model);
     InstructorRestModel instructorRest = instructorMapper.toRest(entity);
 

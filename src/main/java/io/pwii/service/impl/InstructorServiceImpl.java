@@ -10,9 +10,9 @@ import javax.ws.rs.NotFoundException;
 import io.pwii.entity.Instructor;
 import io.pwii.entity.enums.UserRoles;
 import io.pwii.mapper.InstructorMapper;
-import io.pwii.model.InstructorUpdateRequest;
 import io.pwii.model.PageModel;
 import io.pwii.model.request.InstructorRequestModel;
+import io.pwii.model.request.InstructorUpdateRequestModel;
 import io.pwii.repository.InstructorRepository;
 import io.pwii.service.InstructorService;
 import io.quarkus.elytron.security.common.BcryptUtil;
@@ -53,7 +53,7 @@ public class InstructorServiceImpl implements InstructorService {
 
   @Transactional
   @Override
-  public Instructor update(Long instructorId, InstructorUpdateRequest instructor) {
+  public Instructor update(Long instructorId, InstructorUpdateRequestModel instructor) {
     Optional<Instructor> optionalInstructor = instructorRepository.findByIdOptional(instructorId);
     if (optionalInstructor.isEmpty()) {
       throw new NotFoundException("Instructor Not Found");
