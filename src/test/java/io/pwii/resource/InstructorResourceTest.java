@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import java.net.URL;
 import java.time.LocalDate;
@@ -91,19 +92,6 @@ public class InstructorResourceTest {
       .updatedAt(marieEntity.getUpdatedAt())
       .build();
 
-  @BeforeEach
-  void setUp() {
-    when(instructorService.create(johnRequestModel)).thenReturn(johnEntity);
-    when(instructorService.list(0, 25)).thenReturn(PageModel.<Instructor>builder()
-        .content(Arrays.asList(johnEntity, marieEntity))
-        .currentPage(0)
-        .currentPageTotalItems(2)
-        .numberOfPages(1)
-        .totalItems(2L)
-        .build());
-  }
-
-
   @Test
   public void shouldNotCreateInstructorWhenRequiredFieldsAreMissing() {
     given()
@@ -116,6 +104,8 @@ public class InstructorResourceTest {
 
   @Test
   public void shouldCreateInstructor() {
+    when(instructorService.create(johnRequestModel)).thenReturn(johnEntity);
+
     InstructorRestModel result = given()
         .contentType(ContentType.JSON)
         .body(johnRequestModel)
@@ -131,7 +121,15 @@ public class InstructorResourceTest {
   @Test
   @TestSecurity(user = "marie@test.com", roles = {"INSTRUCTOR", "ATHLETE"})
   public void shouldListInstructors() {
-    PageModel<InstructorRestModel> result = given()
+    when(instructorService.list(0, 25)).thenReturn(PageModel.<Instructor>builder()
+        .content(Arrays.asList(johnEntity, marieEntity))
+        .currentPage(0)
+        .currentPageTotalItems(2)
+        .numberOfPages(1)
+        .totalItems(2L)
+        .build());
+
+    PageModel<?> result = given()
         .contentType(ContentType.JSON)
         .params("page", "0", "limit", "25")
         .when().get()
@@ -183,6 +181,62 @@ public class InstructorResourceTest {
     assertThat(result, equalTo(expectedModel));
   }
 
+  @Test
+  public void shouldNotUpdateWhenNotAuthenticated() {
+    InstructorUpdateRequestModel updateRequestModel = new InstructorUpdateRequestModel();
+    updateRequestModel.setName("John Smith");
+    updateRequestModel.setPhone("351991563248");
 
+    given()
+        .contentType(ContentType.JSON)
+        .body(updateRequestModel)
+        .when().put("/{instructorId}", 1)
+        .then()
+        .statusCode(401);
+  }
+
+  @Test
+  @TestSecurity(user = "jonh@test.com", roles = {"INSTRUCTOR", "ATHLETE"})
+  public void shouldDeleteInstructorById() {
+    given()
+        .contentType(ContentType.JSON)
+        .when().delete("/{instructorId}", 1)
+        .then()
+        .statusCode(200);
+  }
+
+  @Test
+  public void shouldNotDeleteWhenNotAuthenticated() {
+    given()
+        .contentType(ContentType.JSON)
+        .when().delete("/{instructorId}", 1)
+        .then()
+        .statusCode(401);
+  }
+
+  @Test
+  @TestSecurity(user = "john@test.com", roles = {"INSTRUCTOR", "ATHLETE"})
+  public void shouldGetUserById() {
+    when(instructorService.getById(1L)).thenReturn(johnEntity);
+
+    InstructorRestModel result = given()
+        .contentType(ContentType.JSON)
+        .when().get("/{instructorId}", 1)
+        .then()
+        .statusCode(200)
+        .extract()
+        .as(InstructorRestModel.class);
+
+    assertThat(result, equalTo(johnRestModel));
+  }
+
+  @Test
+  public void shouldNotGetByIdWhenNotAuthenticated() {
+    given()
+        .contentType(ContentType.JSON)
+        .when().get("/{instructorId}", 1)
+        .then()
+        .statusCode(401);
+  }
 
 }
