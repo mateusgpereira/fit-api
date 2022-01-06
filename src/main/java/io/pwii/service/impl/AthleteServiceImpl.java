@@ -13,7 +13,6 @@ import io.pwii.mapper.AthleteMapper;
 import io.pwii.model.PageModel;
 import io.pwii.model.request.AthleteRequestModel;
 import io.pwii.model.request.AthleteUpdateRequest;
-import io.pwii.model.response.AthleteRestModel;
 import io.pwii.repository.AthleteRepository;
 import io.pwii.repository.InstructorRepository;
 import io.pwii.service.AthleteService;
@@ -79,9 +78,9 @@ public class AthleteServiceImpl implements AthleteService {
   @Transactional
   @Override
   public void delete(Long athleteId) {
-    boolean wasDeletesd = athleteRepository.deleteById(athleteId);
+    boolean wasDeleted = athleteRepository.deleteById(athleteId);
 
-    if (!wasDeletesd) {
+    if (!wasDeleted) {
       throw new BadRequestException("Something went wrong");
     }
     

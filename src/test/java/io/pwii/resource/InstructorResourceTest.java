@@ -77,17 +77,6 @@ public class InstructorResourceTest {
       .updatedAt(johnEntity.getUpdatedAt())
       .build();
 
-  private InstructorRestModel marieRestModel = InstructorRestModel.builder()
-      .id(2L)
-      .name("Marie")
-      .cpf("38667293083")
-      .email("marie@test.com")
-      .phone("51991299484")
-      .age(25)
-      .createdAt(marieEntity.getCreatedAt())
-      .updatedAt(marieEntity.getUpdatedAt())
-      .build();
-
   @Test
   public void shouldNotCreateInstructorWhenRequiredFieldsAreMissing() {
     given()

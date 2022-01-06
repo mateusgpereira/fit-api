@@ -3,11 +3,13 @@ package io.pwii.model.request;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@EqualsAndHashCode
 public class AthleteUpdateRequest {
 
   @Size(min = 3, max = 50)
