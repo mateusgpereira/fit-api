@@ -10,12 +10,15 @@ import static org.mockito.Mockito.doThrow;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
+import java.util.Arrays;
+import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
 import io.pwii.entity.Exercise;
 import io.pwii.entity.Workout;
 import io.pwii.entity.enums.WorkoutCategory;
+import io.pwii.model.PageModel;
 import io.pwii.model.request.ExerciseRequestModel;
+import io.pwii.model.request.ExerciseUpdateRequestModel;
 import io.pwii.model.response.ExerciseRestModel;
 import io.pwii.resource.impl.ExerciseResourceImpl;
 import io.pwii.service.ExerciseService;
@@ -32,6 +35,8 @@ public class ExerciseResourceTest {
   @InjectMock
   private ExerciseService exerciseService;
 
+  Gson gson = new Gson();
+
   ExerciseRequestModel exerciseModelOne = ExerciseRequestModel.builder()
       .title("bench press")
       .reps(10)
@@ -40,7 +45,6 @@ public class ExerciseResourceTest {
       .category(WorkoutCategory.CHEST)
       .workoutId(1L)
       .build();
-
 
   Exercise exerciseEntityOne = Exercise.builder()
       .title("bench press")
@@ -53,7 +57,18 @@ public class ExerciseResourceTest {
       .updatedAt(LocalDateTime.now())
       .build();
 
-  ExerciseRestModel exerciseRestModel = ExerciseRestModel.builder()
+  Exercise exerciseEntityTwo = Exercise.builder()
+      .title("cross over")
+      .reps(10)
+      .sets(3)
+      .weight(15.0)
+      .category(WorkoutCategory.CHEST)
+      .workout(Workout.builder().id(2L).build())
+      .createdAt(LocalDate.now())
+      .updatedAt(LocalDateTime.now())
+      .build();
+
+  ExerciseRestModel exerciseRestModelOne = ExerciseRestModel.builder()
       .title("bench press")
       .reps(10)
       .sets(3)
@@ -64,18 +79,111 @@ public class ExerciseResourceTest {
       .updatedAt(exerciseEntityOne.getUpdatedAt())
       .build();
 
+  ExerciseRestModel exerciseRestModelTwo = ExerciseRestModel.builder()
+      .title("bench press")
+      .reps(10)
+      .sets(3)
+      .weight(20.0)
+      .category(WorkoutCategory.CHEST)
+      .workoutId(1L)
+      .createdAt(LocalDate.now())
+      .updatedAt(exerciseEntityOne.getUpdatedAt())
+      .build();
+
+  ExerciseUpdateRequestModel exerciseUpdateModel = ExerciseUpdateRequestModel.builder()
+      .sets(4)
+      .reps(12)
+      .build();
+
 
   @Test
   @TestSecurity(user = "marie@test.com", roles = {"INSTRUCTOR"})
   public void shouldCreateExercise() {
     when(this.exerciseService.create(exerciseModelOne)).thenReturn(exerciseEntityOne);
 
+    ExerciseRestModel result = given()
+        .contentType(ContentType.JSON)
+        .body(exerciseModelOne)
+        .when()
+        .post().then().statusCode(201)
+        .extract()
+        .as(ExerciseRestModel.class);
+
+    assertEquals(exerciseRestModelOne, result);
+  }
+
+  @Test
+  public void shouldNotCreateExerciseWhenNotAuthenticated() {
     given()
         .contentType(ContentType.JSON)
         .body(exerciseModelOne)
         .when()
-        .post().then().statusCode(201);
+        .post().then().statusCode(401);
   }
 
+  @Test
+  @TestSecurity(user = "marie@test.com", roles = {"INSTRUCTOR"})
+  public void shouldListExercises() {
+    PageModel<Exercise> entityExercisesPageModel = PageModel.<Exercise>builder()
+        .content(Arrays.asList(exerciseEntityOne, exerciseEntityTwo))
+        .currentPage(0)
+        .currentPageTotalItems(2)
+        .numberOfPages(1)
+        .totalItems(2L)
+        .build();
+
+    when(this.exerciseService.list(0, 25)).thenReturn(entityExercisesPageModel);
+
+    PageModel<?> result = given()
+        .contentType(ContentType.JSON)
+        .params("page", "0", "limit", "25")
+        .when()
+        .get()
+        .then()
+        .statusCode(200)
+        .extract()
+        .as(PageModel.class);
+
+    assertThat(result.getContent(), hasSize(2));
+  }
+
+  @Test
+  public void shouldNotListExercisesWhenNotAuthenticated() {
+
+    given()
+        .contentType(ContentType.JSON)
+        .params("page", "0", "limit", "25")
+        .when()
+        .get()
+        .then()
+        .statusCode(401);
+  }
+
+  @Test
+  @TestSecurity(user = "marie@test.com", roles = {"INSTRUCTOR"})
+  public void shouldUpdateAnExerciseById() {
+    Exercise exerciseEntity = gson.fromJson(gson.toJson(exerciseEntityOne), Exercise.class);
+    exerciseEntity.setReps(12);
+    exerciseEntity.setSets(4);
+
+    ExerciseRestModel exerciseRest =
+        gson.fromJson(gson.toJson(exerciseRestModelOne), ExerciseRestModel.class);
+    exerciseRest.setReps(12);
+    exerciseRest.setSets(4);
+
+    when(this.exerciseService.update(1L, exerciseUpdateModel)).thenReturn(exerciseEntity);
+
+    ExerciseRestModel result = given()
+        .contentType(ContentType.JSON)
+        .body(exerciseUpdateModel)
+        .when()
+        .put("/{exerciseId}", 1)
+        .then()
+        .statusCode(200)
+        .extract()
+        .as(ExerciseRestModel.class);
+
+    assertEquals(exerciseRest, result);
+  }
 
 }

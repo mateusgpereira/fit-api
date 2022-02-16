@@ -21,6 +21,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import io.pwii.entity.Exercise;
+import io.pwii.entity.enums.WorkoutCategory;
 import io.pwii.mapper.ExerciseMapper;
 import io.pwii.model.PageModel;
 import io.pwii.model.request.ExerciseRequestModel;

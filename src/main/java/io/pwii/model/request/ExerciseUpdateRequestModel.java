@@ -3,11 +3,19 @@ package io.pwii.model.request;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import io.pwii.entity.enums.WorkoutCategory;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@EqualsAndHashCode
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ExerciseUpdateRequestModel {
 
   private String title;
