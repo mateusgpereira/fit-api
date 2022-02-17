@@ -1,6 +1,8 @@
-<a href="https://quarkus.io/ ">
-  <img src="https://quarkus.io/assets/images/quarkus_logo_horizontal_rgb_600px_reverse.png" alt="Logo">
-</a>  
+<div style="display: inline_block">
+    <img align="center" alt="Mateus-Spring" height="30" width="40" src="https://design.jboss.org/quarkus/logo/final/PNG/quarkus_icon_rgb_64px_default.png"/>
+    <img align="center" alt="Mateus-Java" height="30" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg"/>
+    <img align="center" alt="Mateus-Postgres" height="30" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-original.svg"/>
+</div>
 <br>
 
 # Fit-system App
