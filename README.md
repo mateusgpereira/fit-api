@@ -20,8 +20,22 @@ Then run the following quarkus cli:
 ```shell script
 quarkus dev
 ```
+> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.  
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
+## Tests
+
+Tests on this application are been developed with JUnit, Rest Assured and Mockito.  
+To run the tests we just use this command:
+
+```shell script
+mvn test
+```
+
+To run a single Test Suite just use the following command replacing the placeholder  
+TEST_CLASS for   the Test Suite you want to run:
+```shell script
+ mvn -Dtest=TEST_CLASS test
+```
 
 ## Creating a native executable
 
