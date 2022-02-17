@@ -11,6 +11,8 @@ import static org.mockito.Mockito.doThrow;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import javax.ws.rs.BadRequestException;
+import javax.ws.rs.NotFoundException;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
 import io.pwii.entity.Exercise;
@@ -185,5 +187,52 @@ public class ExerciseResourceTest {
 
     assertEquals(exerciseRest, result);
   }
+
+  @Test
+  public void shouldNotUpdateAnExerciseWhenNotAuthenticated() {
+    given()
+        .contentType(ContentType.JSON)
+        .body(exerciseModelOne)
+        .when()
+        .put("/{exerciceId}", 1)
+        .then()
+        .statusCode(401);
+  }
+
+  @Test
+  @TestSecurity(user = "marie@test.com", roles = {"INSTRUCTOR"})
+  public void shouldDeleteAnExerciseById() {
+    given()
+        .contentType(ContentType.JSON)
+        .when()
+        .delete("/{exerciseId}", 1L)
+        .then()
+        .statusCode(200);
+  }
+
+  @Test
+  public void shouldNotDeleteWhenNotAuthenticated() {
+    given()
+        .contentType(ContentType.JSON)
+        .when()
+        .delete("/{exerciseId}", 1L)
+        .then()
+        .statusCode(401);
+  }
+
+  @Test
+  @TestSecurity(user = "marie@test.com", roles = {"INSTRUCTOR"})
+  public void shouldThrowErrorWhenExerciseIdIsInvalid() {
+    Long nonExistentId = 5489548L;
+    doThrow(BadRequestException.class).when(this.exerciseService).delete(nonExistentId);
+
+    given()
+        .contentType(ContentType.JSON)
+        .when()
+        .delete("/{exerciseId}", nonExistentId)
+        .then()
+        .statusCode(400);
+  }
+
 
 }
