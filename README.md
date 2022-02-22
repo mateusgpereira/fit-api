@@ -26,7 +26,7 @@ quarkus dev
 
 ## Tests
 
-Tests on this application are been developed with JUnit, Rest Assured and Mockito.  
+Tests on this application have been developed with JUnit, Rest Assured and Mockito.  
 To run the tests we just use this command:
 
 ```shell script
@@ -34,7 +34,7 @@ mvn test
 ```
 
 To run a single Test Suite just use the following command replacing the placeholder  
-TEST_CLASS for   the Test Suite you want to run:
+TEST_CLASS with  the Test Suite you want to run:
 ```shell script
  mvn -Dtest=TEST_CLASS test
 ```
