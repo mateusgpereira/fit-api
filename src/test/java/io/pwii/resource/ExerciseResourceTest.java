@@ -234,5 +234,48 @@ public class ExerciseResourceTest {
         .statusCode(400);
   }
 
+  @Test
+  @TestSecurity(user = "marie@test.com", roles = {"INSTRUCTOR"})
+  public void shouldGetExerciseById() {
+    when(this.exerciseService.getById(1L)).thenReturn(exerciseEntityOne);
+
+    ExerciseRestModel result = given()
+        .contentType(ContentType.JSON)
+        .when()
+        .get("/{exerciseId}", 1)
+        .then()
+        .statusCode(200)
+        .extract()
+        .as(ExerciseRestModel.class);
+
+    assertEquals(exerciseRestModelOne, result);
+  }
+
+  @Test
+  public void shouldNotGetExerciseByIdWhenNotAuthenticated() {
+
+    given()
+        .contentType(ContentType.JSON)
+        .when()
+        .get("/{exerciseId}", 1)
+        .then()
+        .statusCode(401);
+  }
+
+  @Test
+  @TestSecurity(user = "marie@test.com", roles = {"INSTRUCTOR"})
+  public void shouldThrowNotFoundforNonExistentId() {
+    Long nonExistentId = 3893823L;
+
+    when(this.exerciseService.getById(nonExistentId)).thenThrow(NotFoundException.class);
+
+    given()
+        .contentType(ContentType.JSON)
+        .when()
+        .get("/{exerciseId}", nonExistentId)
+        .then()
+        .statusCode(404);
+  }
+
 
 }
