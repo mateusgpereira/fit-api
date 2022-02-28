@@ -26,7 +26,6 @@ import io.pwii.repository.ExerciseRepository;
 import io.pwii.repository.InstructorRepository;
 import io.pwii.repository.WorkoutRepository;
 import io.pwii.service.WorkoutService;
-import io.pwii.validation.ModelValidator;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 
 @ApplicationScoped
@@ -52,9 +51,6 @@ public class WorkoutServiceImpl implements WorkoutService {
 
   @Inject
   Logger logger;
-
-  @Inject
-  private ModelValidator modelValidator;
 
   @Transactional
   @Override

@@ -5,11 +5,15 @@ import java.time.LocalDateTime;
 import java.util.Set;
 import io.pwii.entity.enums.WorkoutCategory;
 import io.pwii.entity.enums.WorkoutCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class WorkoutRestModel {
 
   private Long id;

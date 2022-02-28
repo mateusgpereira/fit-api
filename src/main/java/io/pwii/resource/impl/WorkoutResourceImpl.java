@@ -21,6 +21,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import javax.ws.rs.core.Response.Status;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import io.pwii.entity.Workout;
 import io.pwii.mapper.WorkoutMapper;
@@ -52,7 +53,7 @@ public class WorkoutResourceImpl implements WorkoutResource {
   public Response createWorkout(@Context SecurityContext ctx, @Valid WorkoutRequestModel workout) {
     Workout entity = workoutService.create(workout);
     WorkoutRestModel rest = workoutMapper.toRest(entity);
-    return Response.ok(rest).build();
+    return Response.status(Status.CREATED).entity(rest).build();
   }
 
   @GET

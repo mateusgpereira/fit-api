@@ -1,13 +1,11 @@
 package io.pwii.resource;
 
-import static org.mockito.Mockito.when;
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doThrow;
-
+import static org.mockito.Mockito.when;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -276,6 +274,5 @@ public class ExerciseResourceTest {
         .then()
         .statusCode(404);
   }
-
 
 }
