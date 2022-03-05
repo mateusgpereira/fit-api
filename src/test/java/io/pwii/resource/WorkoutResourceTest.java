@@ -18,6 +18,7 @@ import io.pwii.entity.Workout;
 import io.pwii.entity.enums.WorkoutCategory;
 import io.pwii.entity.enums.WorkoutCode;
 import io.pwii.model.PageModel;
+import io.pwii.model.request.ExerciseRequestModel;
 import io.pwii.model.request.ExerciseUpdateRequestModel;
 import io.pwii.model.request.WorkoutRequestModel;
 import io.pwii.model.request.WorkoutUpdateRequestModel;
@@ -35,7 +36,7 @@ import io.restassured.http.ContentType;
 public class WorkoutResourceTest {
 
   Gson gson = new Gson();
-  
+
   @InjectMock
   private WorkoutService workoutService;
 
@@ -104,9 +105,25 @@ public class WorkoutResourceTest {
       .build();
 
   private WorkoutUpdateRequestModel workoutUpdateRequestModel = WorkoutUpdateRequestModel.builder()
-    .category(WorkoutCategory.ABDOMINALS)
-    .code(WorkoutCode.E)
-    .build();
+      .category(WorkoutCategory.ABDOMINALS)
+      .code(WorkoutCode.E)
+      .build();
+
+  private ExerciseRequestModel exerciseRequestModel = ExerciseRequestModel.builder()
+      .category(WorkoutCategory.CHEST)
+      .reps(15)
+      .sets(4)
+      .title("Cross Over")
+      .weight(20.0)
+      .build();
+
+  private ExerciseUpdateRequestModel exerciseUpdateRequestModel =
+      ExerciseUpdateRequestModel.builder()
+          .category(WorkoutCategory.CHEST)
+          .reps(12)
+          .sets(3)
+          .weight(25.0)
+          .build();
 
 
   @Test
@@ -181,7 +198,8 @@ public class WorkoutResourceTest {
     updatedEntity.setCategory(WorkoutCategory.ABDOMINALS);
     updatedEntity.setCode(WorkoutCode.E);
 
-    WorkoutRestModel expected = gson.fromJson(gson.toJson(workoutRestModelOne), WorkoutRestModel.class);
+    WorkoutRestModel expected =
+        gson.fromJson(gson.toJson(workoutRestModelOne), WorkoutRestModel.class);
     expected.setCategory(WorkoutCategory.ABDOMINALS);
     expected.setExercises(Collections.emptySet());
     expected.setCode(WorkoutCode.E);
@@ -189,14 +207,14 @@ public class WorkoutResourceTest {
     when(this.workoutService.update(1L, workoutUpdateRequestModel)).thenReturn(updatedEntity);
 
     WorkoutRestModel result = given()
-      .contentType(ContentType.JSON)
-      .body(workoutUpdateRequestModel)
-      .when()
-      .put("/{workoutId}", 1)
-      .then()
-      .statusCode(200)
-      .extract()
-      .as(WorkoutRestModel.class);
+        .contentType(ContentType.JSON)
+        .body(workoutUpdateRequestModel)
+        .when()
+        .put("/{workoutId}", 1)
+        .then()
+        .statusCode(200)
+        .extract()
+        .as(WorkoutRestModel.class);
 
     assertEquals(expected, result);
   }
@@ -204,33 +222,33 @@ public class WorkoutResourceTest {
   @Test
   public void shouldNotUpdateWorkoutWhenNotAuthenticated() {
     given()
-      .contentType(ContentType.JSON)
-      .body(workoutUpdateRequestModel)
-      .when()
-      .put("/{workoutId}", 1)
-      .then()
-      .statusCode(401);
+        .contentType(ContentType.JSON)
+        .body(workoutUpdateRequestModel)
+        .when()
+        .put("/{workoutId}", 1)
+        .then()
+        .statusCode(401);
   }
 
   @Test
   @TestSecurity(user = "marie@test.com", roles = {"INSTRUCTOR"})
   public void shouldDeleteWorkoutById() {
     given()
-      .contentType(ContentType.JSON)
-      .when()
-      .delete("/{workoutId}", 1)
-      .then()
-      .statusCode(200);
+        .contentType(ContentType.JSON)
+        .when()
+        .delete("/{workoutId}", 1)
+        .then()
+        .statusCode(200);
   }
 
   @Test
   public void shouldNotDeleteWorkoutByIdWhenNotAuthenticated() {
     given()
-      .contentType(ContentType.JSON)
-      .when()
-      .delete("/{workoutId}", 1)
-      .then()
-      .statusCode(401);
+        .contentType(ContentType.JSON)
+        .when()
+        .delete("/{workoutId}", 1)
+        .then()
+        .statusCode(401);
   }
 
   @Test
@@ -239,13 +257,13 @@ public class WorkoutResourceTest {
     when(workoutService.getById(1L)).thenReturn(workoutEntityOne);
 
     WorkoutRestModel actual = given()
-      .contentType(ContentType.JSON)
-      .when()
-      .get("/{workoutId}", 1)
-      .then()
-      .statusCode(200)
-      .extract()
-      .as(WorkoutRestModel.class);
+        .contentType(ContentType.JSON)
+        .when()
+        .get("/{workoutId}", 1)
+        .then()
+        .statusCode(200)
+        .extract()
+        .as(WorkoutRestModel.class);
 
     assertEquals(workoutRestModelOne, actual);
   }
@@ -254,10 +272,10 @@ public class WorkoutResourceTest {
   public void shouldNotGetWorkoutByIdWhenNotAuthenticated() {
 
     given()
-      .contentType(ContentType.JSON)
-      .when()
-      .get("/{workoutId}", 1)
-      .then()
-      .statusCode(401);
+        .contentType(ContentType.JSON)
+        .when()
+        .get("/{workoutId}", 1)
+        .then()
+        .statusCode(401);
   }
 }
