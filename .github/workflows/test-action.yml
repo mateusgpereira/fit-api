@@ -11,5 +11,7 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
+      - name: Generate keys
+        run: cd src/main/resources && ./keygen.sh
       - name: Run tests
         run: mvn test
