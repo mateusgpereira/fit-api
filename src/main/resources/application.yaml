@@ -13,12 +13,12 @@
     jwt:
       sign:
         key:
-          location: privatekey.pem
+          location: privateKey.pem
   mp:
     jwt:
       verify:
         publickey:
-          location: publickey.pem
+          location: publicKey.pem
         issuer: http://localhost:8080
   fitsystem:
     config:
