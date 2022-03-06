@@ -7,21 +7,26 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Set;
+import java.util.List;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
+import org.mockito.internal.util.collections.Sets;
 import io.pwii.entity.Athlete;
+import io.pwii.entity.Exercise;
 import io.pwii.entity.Instructor;
 import io.pwii.entity.Workout;
 import io.pwii.entity.enums.WorkoutCategory;
 import io.pwii.entity.enums.WorkoutCode;
 import io.pwii.model.PageModel;
+import io.pwii.model.enums.UpdateOperations;
 import io.pwii.model.request.ExerciseRequestModel;
-import io.pwii.model.request.ExerciseUpdateRequestModel;
+import io.pwii.model.request.WorkoutExerciseUpdateRequestModel;
 import io.pwii.model.request.WorkoutRequestModel;
 import io.pwii.model.request.WorkoutUpdateRequestModel;
+import io.pwii.model.response.ExerciseRestModel;
 import io.pwii.model.response.WorkoutRestModel;
 import io.pwii.resource.impl.WorkoutResourceImpl;
 import io.pwii.service.WorkoutService;
@@ -44,14 +49,6 @@ public class WorkoutResourceTest {
       .athleteId(1L)
       .category(WorkoutCategory.CHEST)
       .code(WorkoutCode.A)
-      .instructorId(10L)
-      .exercises(null)
-      .build();
-
-  private WorkoutRequestModel workoutRequestModelTwo = WorkoutRequestModel.builder()
-      .athleteId(1L)
-      .category(WorkoutCategory.BACK)
-      .code(WorkoutCode.B)
       .instructorId(10L)
       .exercises(null)
       .build();
@@ -93,17 +90,6 @@ public class WorkoutResourceTest {
       .updatedAt(workoutEntityOne.getUpdatedAt())
       .build();
 
-  private WorkoutRestModel workoutRestModelTwo = WorkoutRestModel.builder()
-      .id(2L)
-      .athleteId(1L)
-      .category(WorkoutCategory.BACK)
-      .code(WorkoutCode.B)
-      .instructorId(10L)
-      .exercises(null)
-      .createdAt(LocalDate.now())
-      .updatedAt(workoutEntityOne.getUpdatedAt())
-      .build();
-
   private WorkoutUpdateRequestModel workoutUpdateRequestModel = WorkoutUpdateRequestModel.builder()
       .category(WorkoutCategory.ABDOMINALS)
       .code(WorkoutCode.E)
@@ -111,19 +97,31 @@ public class WorkoutResourceTest {
 
   private ExerciseRequestModel exerciseRequestModel = ExerciseRequestModel.builder()
       .category(WorkoutCategory.CHEST)
-      .reps(15)
-      .sets(4)
-      .title("Cross Over")
-      .weight(20.0)
+      .reps(12)
+      .sets(3)
+      .weight(25.0)
       .build();
 
-  private ExerciseUpdateRequestModel exerciseUpdateRequestModel =
-      ExerciseUpdateRequestModel.builder()
-          .category(WorkoutCategory.CHEST)
-          .reps(12)
-          .sets(3)
-          .weight(25.0)
-          .build();
+
+  private Exercise exerciseEntityOne = Exercise.builder()
+      .id(1L)
+      .category(WorkoutCategory.CHEST)
+      .reps(12)
+      .sets(3)
+      .weight(25.0)
+      .createdAt(LocalDate.now())
+      .updatedAt(LocalDateTime.now())
+      .build();
+
+  private ExerciseRestModel exerciseRest = ExerciseRestModel.builder()
+      .id(1L)
+      .category(WorkoutCategory.CHEST)
+      .reps(12)
+      .sets(3)
+      .weight(25.0)
+      .createdAt(LocalDate.now())
+      .updatedAt(exerciseEntityOne.getUpdatedAt())
+      .build();
 
 
   @Test
@@ -275,6 +273,108 @@ public class WorkoutResourceTest {
         .contentType(ContentType.JSON)
         .when()
         .get("/{workoutId}", 1)
+        .then()
+        .statusCode(401);
+  }
+
+  @Test
+  @TestSecurity(user = "marie@test.com", roles = {"INSTRUCTOR"})
+  public void shouldAddExerciseToWorkout() {
+    WorkoutExerciseUpdateRequestModel workoutExerciseUpdate =
+        WorkoutExerciseUpdateRequestModel.builder()
+            .operation(UpdateOperations.ADD)
+            .values(Arrays.asList(exerciseRequestModel))
+            .build();
+
+    List<WorkoutExerciseUpdateRequestModel> data = new ArrayList<>();
+    data.add(workoutExerciseUpdate);
+
+    Workout updatedEntity = gson.fromJson(gson.toJson(workoutEntityOne), Workout.class);
+    updatedEntity.addToExercises(exerciseEntityOne);
+
+    WorkoutRestModel expected =
+        gson.fromJson(gson.toJson(workoutRestModelOne), WorkoutRestModel.class);
+    expected.setExercises(Sets.newSet(exerciseRest));
+
+
+    when(this.workoutService.updateExercises(1L, data)).thenReturn(updatedEntity);
+
+    WorkoutRestModel actual = given()
+        .contentType(ContentType.JSON)
+        .body(data)
+        .when()
+        .patch("/{workoutId}/exercises", 1)
+        .then()
+        .statusCode(200)
+        .extract()
+        .as(WorkoutRestModel.class);
+
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  public void shouldNotUpdateExerciseWhenNotAuthenticated() {
+    given()
+        .contentType(ContentType.JSON)
+        .body(new ArrayList<WorkoutExerciseUpdateRequestModel>())
+        .when()
+        .patch("/{workoutId}/exercises", 1)
+        .then()
+        .statusCode(401);
+
+  }
+
+  @Test
+  @TestSecurity(user = "marie@test.com", roles = {"INSTRUCTOR"})
+  public void shouldRemoveExerciseFromWorkout() {
+    WorkoutExerciseUpdateRequestModel workoutExerciseUpdate =
+        WorkoutExerciseUpdateRequestModel.builder()
+            .operation(UpdateOperations.REMOVE)
+            .ids(Arrays.asList(1L))
+            .build();
+
+    List<WorkoutExerciseUpdateRequestModel> data = new ArrayList<>();
+    data.add(workoutExerciseUpdate);
+
+    when(this.workoutService.updateExercises(1L, data)).thenReturn(workoutEntityOne);
+
+    WorkoutRestModel actual = given()
+        .contentType(ContentType.JSON)
+        .body(data)
+        .when()
+        .patch("/{workoutId}/exercises", 1)
+        .then()
+        .statusCode(200)
+        .extract()
+        .as(WorkoutRestModel.class);
+
+    assertEquals(workoutRestModelOne, actual);
+  }
+
+  @Test
+  @TestSecurity(user = "marie@test.com", roles = {"INSTRUCTOR"})
+  public void shouldRemoveExerciseFromWorkoutById() {
+
+    when(this.workoutService.removeExercise(1L, 2L)).thenReturn(workoutEntityOne);
+
+    WorkoutRestModel actual = given()
+        .contentType(ContentType.JSON)
+        .when()
+        .delete("/{workoutId}/exercises/{exerciseId}", 1, 2)
+        .then()
+        .statusCode(200)
+        .extract()
+        .as(WorkoutRestModel.class);
+
+    assertEquals(workoutRestModelOne, actual);
+  }
+
+  @Test
+  public void shouldNotRemoveExerciseByIdWhenNotAuthenticated() {
+    given()
+        .contentType(ContentType.JSON)
+        .when()
+        .delete("/{workoutId}/exercises/{exerciseId}", 1, 2)
         .then()
         .statusCode(401);
   }

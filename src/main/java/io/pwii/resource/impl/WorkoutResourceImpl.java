@@ -118,7 +118,6 @@ public class WorkoutResourceImpl implements WorkoutResource {
   }
 
   @DELETE
-  @PATCH
   @Path("/{workoutId}/exercises/{exerciseId}")
   @Transactional
   @Override
