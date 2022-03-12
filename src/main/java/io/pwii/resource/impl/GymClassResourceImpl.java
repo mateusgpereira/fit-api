@@ -57,6 +57,7 @@ public class GymClassResourceImpl implements GymClassResource {
   }
 
   @GET
+  @RolesAllowed({"INSTRUCTOR", "ATHLETE"})
   @Override
   public Response listGymClasses(
       @Context SecurityContext ctx,
@@ -117,6 +118,7 @@ public class GymClassResourceImpl implements GymClassResource {
 
   @PATCH
   @Path("/{gymClassId}/athletes/{athleteId}")
+  @RolesAllowed({"INSTRUCTOR", "ATHLETE"})
   @Transactional
   @Override
   public Response addAthleteToGymClass(@Context SecurityContext ctx,
@@ -129,6 +131,7 @@ public class GymClassResourceImpl implements GymClassResource {
 
   @DELETE
   @Path("/{gymClassId}/athletes/{athleteId}")
+  @RolesAllowed({"INSTRUCTOR", "ATHLETE"})
   @Transactional
   @Override
   public Response removeAthleteFromGymClass(@Context SecurityContext ctx,

@@ -16,6 +16,7 @@ import io.pwii.model.PageModel;
 import io.pwii.model.request.InstructorRequestModel;
 import io.pwii.model.request.InstructorUpdateRequestModel;
 import io.pwii.model.response.InstructorRestModel;
+import io.pwii.resource.fixtures.InstructorData;
 import io.pwii.resource.impl.InstructorResourceImpl;
 import io.pwii.service.impl.InstructorServiceImpl;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
@@ -42,17 +43,7 @@ public class InstructorResourceTest {
       .age(28)
       .build();
 
-  private Instructor johnEntity = Instructor.builder()
-      .id(1L)
-      .name("John")
-      .cpf("20387648089")
-      .email("john@test.com")
-      .password("123rty")
-      .phone("51991299483")
-      .age(28)
-      .createdAt(LocalDate.now())
-      .updatedAt(LocalDateTime.now())
-      .build();
+  private Instructor johnEntity = InstructorData.createInstructor("john");
 
   private Instructor marieEntity = Instructor.builder()
       .id(2L)
@@ -68,7 +59,7 @@ public class InstructorResourceTest {
 
   private InstructorRestModel johnRestModel = InstructorRestModel.builder()
       .id(1L)
-      .name("John")
+      .name("john")
       .cpf("20387648089")
       .email("john@test.com")
       .phone("51991299483")
@@ -89,6 +80,7 @@ public class InstructorResourceTest {
 
   @Test
   public void shouldCreateInstructor() {
+    System.out.println(johnEntity.getEmail());
     when(instructorService.create(johnRequestModel)).thenReturn(johnEntity);
 
     InstructorRestModel result = given()

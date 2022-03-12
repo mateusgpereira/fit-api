@@ -5,11 +5,15 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Set;
 import io.pwii.entity.enums.GymClassCategory;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Setter
-@Getter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class GymClassRestModel {
 
   private Long id;
