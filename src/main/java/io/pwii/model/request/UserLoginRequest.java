@@ -3,11 +3,15 @@ package io.pwii.model.request;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import io.smallrye.common.constraint.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Setter
-@Getter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class UserLoginRequest {
 
   @NotNull
