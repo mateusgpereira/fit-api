@@ -3,13 +3,18 @@ package io.pwii.model.response;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.Set;
 import io.pwii.entity.enums.GymClassCategory;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Setter
-@Getter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class GymClassRestModel {
 
   private Long id;
@@ -26,7 +31,8 @@ public class GymClassRestModel {
 
   private Integer maxAthletes;
 
-  private Set<AthleteRestBriefModel> athletes;
+  @Builder.Default
+  private Set<AthleteRestBriefModel> athletes = new HashSet<>();
 
   private Integer reservedPlaces;
 

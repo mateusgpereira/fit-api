@@ -3,11 +3,13 @@ package io.pwii.model.request;
 import java.util.List;
 import io.pwii.model.enums.UpdateOperations;
 import io.smallrye.common.constraint.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Setter
-@Getter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UpdateRequestModel<T> {
 
   @NotNull

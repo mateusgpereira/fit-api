@@ -19,6 +19,7 @@ import io.pwii.model.PageModel;
 import io.pwii.model.request.AthleteRequestModel;
 import io.pwii.model.request.AthleteUpdateRequest;
 import io.pwii.model.response.AthleteRestModel;
+import io.pwii.resource.fixtures.AthleteData;
 import io.pwii.resource.impl.AthleteResourceImpl;
 import io.pwii.service.impl.AthleteServiceImpl;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
@@ -44,16 +45,7 @@ public class AthleteResourceTest {
       .password("123rty")
       .build();
 
-  Athlete aliceEntity = Athlete.builder()
-      .id(3L)
-      .name("alice")
-      .age(21)
-      .cpf("38555756065")
-      .email("alice@test.com")
-      .password("123rty")
-      .createdAt(LocalDate.now())
-      .updatedAt(LocalDateTime.now())
-      .build();
+  Athlete aliceEntity = AthleteData.getAthleteEntity(3L, "alice");
 
   AthleteRestModel aliceRestModel = AthleteRestModel.builder()
       .id(3L)
@@ -65,21 +57,12 @@ public class AthleteResourceTest {
       .updatedAt(aliceEntity.getUpdatedAt())
       .build();
 
-  Athlete katyEntity = Athlete.builder()
-      .id(4L)
-      .name("katy")
-      .age(23)
-      .cpf("52453561049")
-      .email("katy@test.com")
-      .password("123rty")
-      .createdAt(LocalDate.now())
-      .updatedAt(LocalDateTime.now())
-      .build();
+  Athlete katyEntity = AthleteData.getAthleteEntity(4L, "katy");
 
   AthleteRestModel katyRestModel = AthleteRestModel.builder()
       .id(4L)
       .name("katy")
-      .age(23)
+      .age(21)
       .cpf("52453561049")
       .email("katy@test.com")
       .createdAt(LocalDate.now())
