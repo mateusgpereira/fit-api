@@ -55,6 +55,7 @@ public class GymClass {
   @Column(length = 5)
   private Integer maxAthletes;
 
+  @Builder.Default
   @ManyToMany
   private Set<Athlete> athletes = new HashSet<>();
 

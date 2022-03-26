@@ -4,12 +4,16 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import io.pwii.entity.enums.GymClassCategory;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
-@Setter
-@Getter
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class GymClassUpdateRequestModel {
 
   private String title;

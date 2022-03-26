@@ -3,9 +3,14 @@ package io.pwii.resource.fixtures;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import io.pwii.entity.GymClass;
 import io.pwii.entity.enums.GymClassCategory;
+import io.pwii.model.PageModel;
 import io.pwii.model.request.GymClassRequestModel;
+import io.pwii.model.request.GymClassUpdateRequestModel;
 import io.pwii.model.response.GymClassRestModel;
 
 public class GymClassData {
@@ -26,31 +31,51 @@ public class GymClassData {
         .build();
   }
 
-  public static GymClass getGymClassEntity() {
+  public static GymClass getGymClassEntity(Long id, String title, String instructorName, Integer maxAthletes) {
     return GymClass.builder()
-        .id(1L)
+        .id(id)
         .classDate(classDate)
         .classTime(classTime)
-        .instructor(InstructorData.createInstructor("john"))
-        .maxAthletes(20)
-        .title(YOGA)
+        .instructor(InstructorData.createInstructor(instructorName))
+        .maxAthletes(maxAthletes)
+        .title(title)
         .type(GymClassCategory.YOGA)
         .createdAt(classDate)
         .updatedAt(updatedAt)
         .build();
   }
 
-  public static GymClassRestModel getGymClassRestModel() {
+  public static GymClassRestModel getGymClassRestModel(Long id, String title, String instructorName, Integer maxAthletes) {
     return GymClassRestModel.builder()
-        .id(1L)
+        .id(id)
         .classDate(classDate)
         .classTime(classTime)
-        .instructor(InstructorData.createInstruRestBriefModel("john"))
-        .maxAthletes(20)
-        .title(YOGA)
+        .instructor(InstructorData.createInstruRestBriefModel(instructorName))
+        .maxAthletes(maxAthletes)
+        .title(title)
         .type(GymClassCategory.YOGA)
         .createdAt(classDate)
         .updatedAt(updatedAt)
+        .build();
+  }
+
+  public static PageModel<GymClass> getGymClassPage() {
+    List<GymClass> content = new ArrayList<>(
+        Arrays.asList(getGymClassEntity(1L, YOGA, "john", 20), getGymClassEntity(2L, YOGA, "marie", 20)));
+    return PageModel.<GymClass>builder()
+        .content(content)
+        .currentPage(0)
+        .currentPageTotalItems(2)
+        .numberOfPages(1)
+        .totalItems(2L)
+        .build();
+  }
+
+  public static GymClassUpdateRequestModel getGymClassUpdateModel(String title,
+      Integer maxAthletes) {
+    return GymClassUpdateRequestModel.builder()
+        .title(title)
+        .maxAthletes(maxAthletes)
         .build();
   }
 
