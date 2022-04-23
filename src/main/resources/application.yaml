@@ -13,12 +13,12 @@
     jwt:
       sign:
         key:
-          location: privateKey.pem
+          location: privatekey.pem
   mp:
     jwt:
       verify:
         publickey:
-          location: publicKey.pem
+          location: publickey.pem
         issuer: http://localhost:8080
   fitsystem:
     config:
@@ -53,16 +53,23 @@
       resources:
         includes: publickey.pem
     smallrye-openapi:
-      info-title: FitSystem API (DEV)
+      info-title: FitApp API (DEV)
       info-version: 1.0.0
-      info-description: API for FIT SYSTEM management
+      info-description: API for FIT APP management
       info-contact-email: mateusgoncalvespereira@gmail.com
       info-contact-name: Mateus
       info-contact-url: https://github.com/mateusgpereira/
       info-license-name: Apache 2.0
       info-license-url: https://www.apache.org/licenses/LICENSE-2.0.html
+      path: /swagger
     swagger-ui:
       always-include: true
+      path: /swagger/openapi
+    http:
+      cors:
+        ~: true
+        origins:
+          - http://localhost:4200
   smallrye:
     jwt:
       sign:
