@@ -16,7 +16,7 @@ import io.pwii.model.response.LoginResponse;
 import io.pwii.resource.UserResource;
 import io.pwii.service.UserService;
 
-@Path("/login")
+@Path("/v1/login")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class UserResourceImpl implements UserResource {

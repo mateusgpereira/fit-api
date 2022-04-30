@@ -27,12 +27,12 @@ public class AthleteGymClassAppointmentServiceImpl implements AthleteGymClassApp
   public void create(JsonWebToken jwt, Long athleteId, Long gymClassId) {
     Athlete athlete = this.getAthleteByIdAndToken(jwt, athleteId);
 
-    Optional<GymClass> optionalGymClasse = gymClassRepository.findByIdOptional(gymClassId);
-    if (optionalGymClasse.isEmpty()) {
+    Optional<GymClass> optionalGymClass = gymClassRepository.findByIdOptional(gymClassId);
+    if (optionalGymClass.isEmpty()) {
       throw new BadRequestException("Invalid GymClass");
     }
 
-    GymClass gymClass = optionalGymClasse.get();
+    GymClass gymClass = optionalGymClass.get();
     gymClass.addToAthletes(athlete);
     gymClassRepository.persist(gymClass);
   }
